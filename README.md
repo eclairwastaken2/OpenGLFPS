@@ -1,9 +1,15 @@
-A refactor of LearnOpenGL code founde here: https://github.com/JoeyDeVries/LearnOpenGL/tree/master/src/1.getting_started
+A combination between onelonecoder ray trace c++ code: https://github.com/OneLoneCoder/Javidx9
+and joeythevries learnopengl: https://github.com/JoeyDeVries/LearnOpenGL
 
+An FPS style 3D mapping from a grid. 
 
-practice project for me to practice RAII
+Todo (i hope): 
+1. enemies. 
+2. floors
+3. BFS and DFS simul bcs leetcode is VERY useful for coding
+4. better refactoring
+5. stop vibe coding, more thinking
 
-Refactored shader.cpp + shader.h + main.cpp to match RAII. 
-To do: camera
+HERE IS MY OPENGL CHEATSHEET: https://medium.com/@eclairwastaken/my-ultimate-opengl-cheatsheet-9a59def5819b?postPublishedType=initial
 
-(ignore some weird namings and unused files lol, i copy pasted another project because im too lazy to do the cmake + glad configs for a practice proj :) )
+ignore the weird file namings, i copy pasted it from another project bcs im too lazy to  setup glad and cmake again :(
