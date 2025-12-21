@@ -139,19 +139,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="cameraController.cpp" />
+    <ClCompile Include="camera\cameraController.cpp" />
+    <ClCompile Include="core\window.cpp" />
     <ClCompile Include="glad.c" />
-    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="input\callbacks.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="stb_image.cpp" />
+    <ClCompile Include="world\level.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="camera.h" />
-    <ClInclude Include="cameraController.h" />
-    <ClInclude Include="errorReporting.h" />
+    <ClInclude Include="camera\camera.h" />
+    <ClInclude Include="camera\cameraController.h" />
+    <ClInclude Include="core\window.h" />
+    <ClInclude Include="gl\buffer.h" />
+    <ClInclude Include="gl\texture2d.h" />
+    <ClInclude Include="gl\vertexArray.h" />
+    <ClInclude Include="input\callbacks.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="world\level.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />

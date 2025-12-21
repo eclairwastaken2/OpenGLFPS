@@ -18,7 +18,7 @@
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="stb_image.cpp">
@@ -27,7 +27,16 @@
     <ClCompile Include="shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cameraController.cpp">
+    <ClCompile Include="camera\cameraController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="core\window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="input\callbacks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="world\level.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -42,20 +51,35 @@
     <ClInclude Include="stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="errorReporting.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="camera.h">
+    <ClInclude Include="camera\camera.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="cameraController.h">
+    <ClInclude Include="camera\cameraController.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core\window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gl\vertexArray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gl\buffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gl\texture2d.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="input\callbacks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="world\level.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
