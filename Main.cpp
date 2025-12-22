@@ -182,6 +182,37 @@ int main() try
 		{
 			for (int x = 0; x < level.getW(); x++)
 			{
+				//FLOOR
+				glm::mat4 floorModel = glm::mat4(1.0f);
+				floorModel = glm::translate(
+					floorModel,
+					glm::vec3(x + 0.5f, -6.0f, z + 0.5f)
+				);
+				shader.setMat4("model", floorModel);
+				glDrawArrays(GL_TRIANGLES, 0, 36);
+
+				//CEILING
+				glm::mat4 ceilingModel = glm::mat4(1.0f);
+				ceilingModel = glm::translate(
+					ceilingModel,
+					glm::vec3(x + 0.5f, 6.0f, z + 0.5f)
+				);
+
+			/*	ceilingModel = glm::scale(
+					ceilingModel,
+					glm::vec3(1.0f, -1.0f, 1.0f)
+				);*/
+
+				shader.setMat4("model", ceilingModel);
+				glDrawArrays(GL_TRIANGLES, 0, 36);
+			}
+		}
+
+
+		for (int z = 0; z < level.getH(); z++)
+		{
+			for (int x = 0; x < level.getW(); x++)
+			{
 				if (level.at(x, z) == '#')
 				{
 					glm::mat4 model = glm::mat4(1.0f);
