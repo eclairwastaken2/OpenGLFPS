@@ -1,6 +1,7 @@
 #include "mesh.h"
 #include <glad/glad.h>
 
+//“Before the constructor body runs, construct the member vbo using the argument GL_ARRAY_BUFFER.”
 Mesh::Mesh(const std::vector<float>& vertices) : vbo(GL_ARRAY_BUFFER)
 {
 	vertexCount = static_cast<int>(vertices.size() / 5); 

@@ -9,6 +9,7 @@ Todo (i hope):
 3. BFS and DFS simul bcs leetcode is VERY useful for coding
 4. better refactoring
 5. stop vibe coding, more thinking
+NEW TO DO: use every concepts from learnopengl here :v 
 
 HERE IS MY OPENGL CHEATSHEET: https://medium.com/@eclairwastaken/my-ultimate-opengl-cheatsheet-9a59def5819b?postPublishedType=initial
 
