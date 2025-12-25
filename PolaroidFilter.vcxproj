@@ -141,7 +141,9 @@
   <ItemGroup>
     <ClCompile Include="camera\cameraController.cpp" />
     <ClCompile Include="core\window.cpp" />
+    <ClCompile Include="geometry\cube.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="gl\mesh.cpp" />
     <ClCompile Include="input\callbacks.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="shader.cpp" />
@@ -152,7 +154,9 @@
     <ClInclude Include="camera\camera.h" />
     <ClInclude Include="camera\cameraController.h" />
     <ClInclude Include="core\window.h" />
+    <ClInclude Include="geometry\cube.h" />
     <ClInclude Include="gl\buffer.h" />
+    <ClInclude Include="gl\mesh.h" />
     <ClInclude Include="gl\texture2d.h" />
     <ClInclude Include="gl\vertexArray.h" />
     <ClInclude Include="input\callbacks.h" />

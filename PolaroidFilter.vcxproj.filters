@@ -39,6 +39,12 @@
     <ClCompile Include="world\level.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="geometry\cube.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gl\mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="frag.fs">
@@ -82,6 +88,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="shapes\Cube.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="geometry\cube.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gl\mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

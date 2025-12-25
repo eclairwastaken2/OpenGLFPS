@@ -13,6 +13,8 @@
 #include "camera/camera.h"
 #include "camera/cameraController.h"
 #include "core/window.h"
+#include "geometry/cube.h"
+#include "gl/mesh.h"
 #include "gl/vertexArray.h"
 #include "gl/buffer.h"
 #include "gl/texture2d.h"
@@ -68,66 +70,7 @@ int main() try
 	glEnable(GL_DEPTH_TEST); 
 	Shader shader("vertex.vs", "frag.fs");
 
-	float vertices[] =
-	{
-		 -0.5f, -2.0f, -0.5f,  0.0f, 0.0f,
-		 0.5f, -2.0f, -0.5f,  1.0f, 0.0f,
-		 0.5f,  4.0f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  4.0f, -0.5f,  1.0f, 1.0f,
-		-0.5f,  4.0f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -2.0f, -0.5f,  0.0f, 0.0f,
-
-		-0.5f, -2.0f,  0.5f,  0.0f, 0.0f,
-		 0.5f, -2.0f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  4.0f,  0.5f,  1.0f, 1.0f,
-		 0.5f,  4.0f,  0.5f,  1.0f, 1.0f,
-		-0.5f,  4.0f,  0.5f,  0.0f, 1.0f,
-		-0.5f, -2.0f,  0.5f,  0.0f, 0.0f,
-
-		-0.5f,  4.0f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  4.0f, -0.5f,  1.0f, 1.0f,
-		-0.5f, -2.0f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -2.0f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -2.0f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  4.0f,  0.5f,  1.0f, 0.0f,
-
-		 0.5f,  4.0f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  4.0f, -0.5f,  1.0f, 1.0f,
-		 0.5f, -2.0f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -2.0f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -2.0f,  0.5f,  0.0f, 0.0f,
-		 0.5f,  4.0f,  0.5f,  1.0f, 0.0f,
-
-		-0.5f, -2.0f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -2.0f, -0.5f,  1.0f, 1.0f,
-		 0.5f, -2.0f,  0.5f,  1.0f, 0.0f,
-		 0.5f, -2.0f,  0.5f,  1.0f, 0.0f,
-		-0.5f, -2.0f,  0.5f,  0.0f, 0.0f,
-		-0.5f, -2.0f, -0.5f,  0.0f, 1.0f,
-
-		-0.5f,  4.0f, -0.5f,  0.0f, 1.0f,
-		 0.5f,  4.0f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  4.0f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  4.0f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  4.0f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  4.0f, -0.5f,  0.0f, 1.0f
-	};
-
-	VertexArray vao;
-	Buffer vbo(GL_ARRAY_BUFFER);
-	Buffer ebo(GL_ELEMENT_ARRAY_BUFFER);
-
-	vao.bind();
-	vbo.bind();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
+	Mesh cubeMesh(Geometry::CubeVertices); 
 
 	Texture2D texture1;
 	texture1.setWrap(GL_REPEAT, GL_REPEAT);
@@ -167,16 +110,12 @@ int main() try
 		shader.use();
 
 		texture1.bind(0);
-		vao.bind();
 
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		shader.setMat4("projection", projection);
 
 		glm::mat4 view = camera.GetViewMatrix();
 		shader.setMat4("view", view);
-
-		// render boxes
-		vao.bind();
 
 		for (int z = 0; z < level.getH(); z++)
 		{
@@ -204,7 +143,7 @@ int main() try
 				);*/
 
 				shader.setMat4("model", ceilingModel);
-				glDrawArrays(GL_TRIANGLES, 0, 36);
+				cubeMesh.draw(); 
 			}
 		}
 
@@ -218,7 +157,7 @@ int main() try
 					glm::mat4 model = glm::mat4(1.0f);
 					model = glm::translate(model, glm::vec3((float)x, 0.0f, (float)z));
 					shader.setMat4("model", model);
-					glDrawArrays(GL_TRIANGLES, 0, 36);
+					cubeMesh.draw(); 
 				}
 			}
 		}
