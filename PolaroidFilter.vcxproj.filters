@@ -52,6 +52,8 @@
     </None>
     <None Include="vertex.vs" />
     <None Include=".gitignore" />
+    <None Include="light_caster.vs" />
+    <None Include="light_caster.fs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">

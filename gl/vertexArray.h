@@ -14,6 +14,7 @@ public:
 	//line below same case but for a = b -> b.operator=(a);
 	VertexArray& operator=(const VertexArray&) = delete;
 	void bind() const { glBindVertexArray(id_); }
+	int getId() const { return id_; }
 
 private:
 	unsigned int id_ = 0;

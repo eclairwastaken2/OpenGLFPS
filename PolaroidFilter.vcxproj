@@ -169,6 +169,8 @@
   <ItemGroup>
     <None Include=".gitignore" />
     <None Include="frag.fs" />
+    <None Include="light_caster.fs" />
+    <None Include="light_caster.vs" />
     <None Include="vertex.vs" />
   </ItemGroup>
   <ItemGroup>

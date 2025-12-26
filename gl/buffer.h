@@ -14,6 +14,7 @@ public:
 	Buffer& operator=(const Buffer&) = delete;
 
 	void bind() const { glBindBuffer(type_, id_); }
+	int getId() const { return id_; }
 
 private:
 	unsigned int id_ = 0;

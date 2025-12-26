@@ -63,6 +63,7 @@ int main() try
 	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 	glEnable(GL_DEPTH_TEST); 
 	Shader shader("vertex.vs", "frag.fs");
+	Shader lightingShader("light_caster.vs", "light_caster.fs"); 
 
 	Mesh cubeMesh(Geometry::CubeVertices); 
 
@@ -74,7 +75,9 @@ int main() try
 	unsigned char* data = stbi_load("container.jpg", &w, &h, &channels, 0);
 	texture1.upload(w, h, GL_RGB, data);
 	stbi_image_free(data);
-
+	lightingShader.use();
+	lightingShader.setInt("material.diffuse", 0);
+	lightingShader.setInt("material.specular", 1);
 	while (!glfwWindowShouldClose(window.get())) {
 		float currentFrame = static_cast<float>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
@@ -99,12 +102,40 @@ int main() try
 		glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		shader.use();
+		lightingShader.use();
+		lightingShader.setVec3("light.position", camera.Position);
+		lightingShader.setVec3("light.direction", camera.Front);
+		lightingShader.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
+		lightingShader.setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+		lightingShader.setVec3("viewPos", camera.Position);
+		lightingShader.use();
+		lightingShader.setVec3("light.position", camera.Position);
+		lightingShader.setVec3("light.direction", camera.Front);
+		lightingShader.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
+		lightingShader.setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+		lightingShader.setVec3("viewPos", camera.Position);
+
+		// light properties
+		lightingShader.setVec3("light.ambient", 0.1f, 0.1f, 0.1f);
+		// we configure the diffuse intensity slightly higher; the right lighting conditions differ with each lighting method and environment.
+		// each environment and lighting type requires some tweaking to get the best out of your environment.
+		lightingShader.setVec3("light.diffuse", 0.8f, 0.8f, 0.8f);
+		lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+		lightingShader.setFloat("light.constant", 1.0f);
+		lightingShader.setFloat("light.linear", 0.09f);
+		lightingShader.setFloat("light.quadratic", 0.032f);
+
+		// material properties
+		lightingShader.setFloat("material.shininess", 32.0f);
 		texture1.bind(0);
 
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		shader.setMat4("projection", projection);
 		glm::mat4 view = camera.GetViewMatrix();
 		shader.setMat4("view", view);
+		lightingShader.setMat4("projection", projection);
+		lightingShader.setMat4("view", view);
+
 
 		for (int z = 0; z < level.getH(); z++)
 		{
@@ -116,7 +147,7 @@ int main() try
 					floorModel,
 					glm::vec3(x + 0.5f, -6.0f, z + 0.5f)
 				);
-				shader.setMat4("model", floorModel);
+				lightingShader.setMat4("model", floorModel);
 				glDrawArrays(GL_TRIANGLES, 0, 36);
 
 				//CEILING
@@ -126,7 +157,7 @@ int main() try
 					glm::vec3(x + 0.5f, 6.0f, z + 0.5f)
 				);
 
-				shader.setMat4("model", ceilingModel);
+				lightingShader.setMat4("model", ceilingModel);
 				cubeMesh.draw(); 
 			}
 		}
@@ -140,7 +171,7 @@ int main() try
 				{
 					glm::mat4 model = glm::mat4(1.0f);
 					model = glm::translate(model, glm::vec3((float)x, 0.0f, (float)z));
-					shader.setMat4("model", model);
+					lightingShader.setMat4("model", model);
 					cubeMesh.draw(); 
 				}
 			}
