@@ -32,40 +32,40 @@
                       << ":" << __LINE__ << std::endl; \
     }
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height); 
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
-float lastX = SCR_WIDTH / 2.0f; 
-float lastY = SCR_HEIGHT / 2.0f; 
-bool firstMouse = true; 
+float lastX = SCR_WIDTH / 2.0f;
+float lastY = SCR_HEIGHT / 2.0f;
+bool firstMouse = true;
 
-float deltaTime = 0.0f; 
+float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 constexpr float PLAYER_RADIUS = 0.2f; // collision padding
 
-Level level; 
+Level level;
 Camera camera(level.findSpawn());
 CameraController cameraController(camera, SCR_WIDTH / 2.0f, SCR_HEIGHT / 2.0f);
 
 int main() try
 {
-	Window window(800, 600, "RAII OpenGL"); 
+	Window window(800, 600, "RAII OpenGL");
 	glfwSetWindowUserPointer(window.get(), &cameraController);
 
-	registerCallbacks(window.get()); 
-	glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR); 
+	registerCallbacks(window.get());
+	glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR);
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		throw std::runtime_error("Failed to init GLAD");
 	}
 	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
-	glEnable(GL_DEPTH_TEST); 
+	glEnable(GL_DEPTH_TEST);
 	Shader shader("vertex.vs", "frag.fs");
-	Shader lightingShader("light_caster.vs", "light_caster.fs"); 
+	Shader lightingShader("light_caster.vs", "light_caster.fs");
 
-	Mesh cubeMesh(Geometry::CubeVertices); 
+	Mesh cubeMesh(Geometry::CubeVertices);
 
 	Texture2D texture1;
 	texture1.setWrap(GL_REPEAT, GL_REPEAT);
@@ -101,18 +101,12 @@ int main() try
 
 		glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		shader.use();
+		//shader.use();
 		lightingShader.use();
 		lightingShader.setVec3("light.position", camera.Position);
 		lightingShader.setVec3("light.direction", camera.Front);
-		lightingShader.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
-		lightingShader.setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
-		lightingShader.setVec3("viewPos", camera.Position);
-		lightingShader.use();
-		lightingShader.setVec3("light.position", camera.Position);
-		lightingShader.setVec3("light.direction", camera.Front);
-		lightingShader.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
-		lightingShader.setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+		lightingShader.setFloat("light.cutOff", glm::cos(glm::radians(20.5f)));
+		lightingShader.setFloat("light.outerCutOff", glm::cos(glm::radians(25.5f)));
 		lightingShader.setVec3("viewPos", camera.Position);
 
 		// light properties
@@ -158,7 +152,7 @@ int main() try
 				);
 
 				lightingShader.setMat4("model", ceilingModel);
-				cubeMesh.draw(); 
+				cubeMesh.draw();
 			}
 		}
 
@@ -172,7 +166,7 @@ int main() try
 					glm::mat4 model = glm::mat4(1.0f);
 					model = glm::translate(model, glm::vec3((float)x, 0.0f, (float)z));
 					lightingShader.setMat4("model", model);
-					cubeMesh.draw(); 
+					cubeMesh.draw();
 				}
 			}
 		}
