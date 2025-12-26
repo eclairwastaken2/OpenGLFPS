@@ -42,18 +42,12 @@ float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true; 
 
 float deltaTime = 0.0f; 
-float lastFrame = 0.0f; 
-
-
-
+float lastFrame = 0.0f;
 constexpr float PLAYER_RADIUS = 0.2f; // collision padding
 
-
 Level level; 
-
 Camera camera(level.findSpawn());
 CameraController cameraController(camera, SCR_WIDTH / 2.0f, SCR_HEIGHT / 2.0f);
-
 
 int main() try
 {
@@ -81,7 +75,6 @@ int main() try
 	texture1.upload(w, h, GL_RGB, data);
 	stbi_image_free(data);
 
-
 	while (!glfwWindowShouldClose(window.get())) {
 		float currentFrame = static_cast<float>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
@@ -105,15 +98,11 @@ int main() try
 
 		glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
 		shader.use();
-
 		texture1.bind(0);
 
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		shader.setMat4("projection", projection);
-
 		glm::mat4 view = camera.GetViewMatrix();
 		shader.setMat4("view", view);
 
@@ -136,11 +125,6 @@ int main() try
 					ceilingModel,
 					glm::vec3(x + 0.5f, 6.0f, z + 0.5f)
 				);
-
-			/*	ceilingModel = glm::scale(
-					ceilingModel,
-					glm::vec3(1.0f, -1.0f, 1.0f)
-				);*/
 
 				shader.setMat4("model", ceilingModel);
 				cubeMesh.draw(); 
@@ -165,8 +149,6 @@ int main() try
 		glfwSwapBuffers(window.get());
 		glfwPollEvents();
 	}
-
-
 	return 0;
 }
 catch (const std::exception& e) {
