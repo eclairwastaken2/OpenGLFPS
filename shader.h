@@ -98,6 +98,8 @@ public:
         glUniformMatrix4fv(glGetUniformLocation(id_, name.c_str()), 1, GL_FALSE, &mat[0][0]);
     }
 
+    GLuint getId() const { return id_; }
+
 private: 
 	GLuint id_ = 0; 
 };

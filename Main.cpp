@@ -34,8 +34,8 @@
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 1800;
+const unsigned int SCR_HEIGHT = 1600;
 
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
@@ -51,11 +51,11 @@ CameraController cameraController(camera, SCR_WIDTH / 2.0f, SCR_HEIGHT / 2.0f);
 
 int main() try
 {
-	Window window(800, 600, "RAII OpenGL");
+	Window window(1800, 1600, "RAII OpenGL");
 	glfwSetWindowUserPointer(window.get(), &cameraController);
 
 	registerCallbacks(window.get());
-	glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR);
+	glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		throw std::runtime_error("Failed to init GLAD");
@@ -65,7 +65,7 @@ int main() try
 	Shader shader("vertex.vs", "frag.fs");
 	Shader lightingShader("light_caster.vs", "light_caster.fs");
 
-	Mesh cubeMesh(Geometry::CubeVertices);
+	Mesh cubeMesh = MakeCube();
 
 	Texture2D texture1;
 	texture1.setWrap(GL_REPEAT, GL_REPEAT);
@@ -142,7 +142,7 @@ int main() try
 					glm::vec3(x + 0.5f, -6.0f, z + 0.5f)
 				);
 				lightingShader.setMat4("model", floorModel);
-				glDrawArrays(GL_TRIANGLES, 0, 36);
+				cubeMesh.draw(lightingShader);
 
 				//CEILING
 				glm::mat4 ceilingModel = glm::mat4(1.0f);
@@ -152,7 +152,7 @@ int main() try
 				);
 
 				lightingShader.setMat4("model", ceilingModel);
-				cubeMesh.draw();
+				cubeMesh.draw(lightingShader);
 			}
 		}
 
@@ -166,7 +166,7 @@ int main() try
 					glm::mat4 model = glm::mat4(1.0f);
 					model = glm::translate(model, glm::vec3((float)x, 0.0f, (float)z));
 					lightingShader.setMat4("model", model);
-					cubeMesh.draw();
+					cubeMesh.draw(lightingShader);
 				}
 			}
 		}
