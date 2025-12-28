@@ -24,7 +24,7 @@
     <ClCompile Include="stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="shader.cpp">
+    <ClCompile Include="gl\shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="camera\cameraController.cpp">
@@ -42,9 +42,6 @@
     <ClCompile Include="geometry\cube.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gl\mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="frag.fs">
@@ -54,6 +51,7 @@
     <None Include=".gitignore" />
     <None Include="light_caster.vs" />
     <None Include="light_caster.fs" />
+    <None Include="C:\Users\user\Downloads\assimp-6.0.2\assimp-6.0.2\instalation\bin\assimp-vc145-mt.dll" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">
@@ -62,7 +60,7 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="shader.h">
+    <ClInclude Include="gl\shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="camera\camera.h">
@@ -96,6 +94,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="gl\mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gl\model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

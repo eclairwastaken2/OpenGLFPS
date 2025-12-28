@@ -72,9 +72,17 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>D:\webgl\PolaroidFilter\PolaroidFilter\Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\webgl\PolaroidFilter\PolaroidFilter\Libraries\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>D:\webgl\PolaroidFilter\PolaroidFilter\Libraries\lib;C:\Users\user\Downloads\assimp-6.0.2\assimp-6.0.2\instalation\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>D:\webgl\PolaroidFilter\PolaroidFilter\Libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\webgl\PolaroidFilter\PolaroidFilter\Libraries\lib;C:\Users\user\Downloads\assimp-6.0.2\assimp-6.0.2\instalation\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>D:\webgl\PolaroidFilter\PolaroidFilter\Libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\webgl\PolaroidFilter\PolaroidFilter\Libraries\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>D:\webgl\PolaroidFilter\PolaroidFilter\Libraries\include;$(IncludePath)</IncludePath>
     <LibraryPath>D:\webgl\PolaroidFilter\PolaroidFilter\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -90,7 +98,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;assimp-vc145-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -106,6 +114,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\user\Downloads\assimp-6.0.2\assimp-6.0.2\instalation\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc145-mt.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -120,7 +130,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;assimp-vc145-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -136,6 +146,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\user\Downloads\assimp-6.0.2\assimp-6.0.2\instalation\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc145-mt.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -143,10 +155,9 @@
     <ClCompile Include="core\window.cpp" />
     <ClCompile Include="geometry\cube.cpp" />
     <ClCompile Include="glad.c" />
-    <ClCompile Include="gl\mesh.cpp" />
     <ClCompile Include="input\callbacks.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="shader.cpp" />
+    <ClCompile Include="gl\shader.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="world\level.cpp" />
   </ItemGroup>
@@ -157,17 +168,19 @@
     <ClInclude Include="geometry\cube.h" />
     <ClInclude Include="gl\buffer.h" />
     <ClInclude Include="gl\mesh.h" />
+    <ClInclude Include="gl\model.h" />
     <ClInclude Include="gl\texture2d.h" />
     <ClInclude Include="gl\vertexArray.h" />
     <ClInclude Include="input\callbacks.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="shader.h" />
+    <ClInclude Include="gl\shader.h" />
     <ClInclude Include="shapes\Cube.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="world\level.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
+    <None Include="C:\Users\user\Downloads\assimp-6.0.2\assimp-6.0.2\instalation\bin\assimp-vc145-mt.dll" />
     <None Include="frag.fs" />
     <None Include="light_caster.fs" />
     <None Include="light_caster.vs" />

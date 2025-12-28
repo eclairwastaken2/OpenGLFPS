@@ -9,7 +9,6 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "shader.h"
 #include "camera/camera.h"
 #include "camera/cameraController.h"
 #include "core/window.h"
@@ -18,6 +17,8 @@
 #include "gl/vertexArray.h"
 #include "gl/buffer.h"
 #include "gl/texture2d.h"
+#include "gl/shader.h"
+#include "gl/model.h"
 #include "input/callbacks.h"
 #include "world/level.h"
 
@@ -78,6 +79,8 @@ int main() try
 	lightingShader.use();
 	lightingShader.setInt("material.diffuse", 0);
 	lightingShader.setInt("material.specular", 1);
+
+	Model ourModel("resources/objects/backpack/backpack.obj");
 	while (!glfwWindowShouldClose(window.get())) {
 		float currentFrame = static_cast<float>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
@@ -121,7 +124,6 @@ int main() try
 
 		// material properties
 		lightingShader.setFloat("material.shininess", 32.0f);
-		texture1.bind(0);
 
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		shader.setMat4("projection", projection);
@@ -130,7 +132,7 @@ int main() try
 		lightingShader.setMat4("projection", projection);
 		lightingShader.setMat4("view", view);
 
-
+		texture1.bind(0);
 		for (int z = 0; z < level.getH(); z++)
 		{
 			for (int x = 0; x < level.getW(); x++)
@@ -163,10 +165,20 @@ int main() try
 			{
 				if (level.at(x, z) == '#')
 				{
+					texture1.bind(0);
 					glm::mat4 model = glm::mat4(1.0f);
 					model = glm::translate(model, glm::vec3((float)x, 0.0f, (float)z));
 					lightingShader.setMat4("model", model);
 					cubeMesh.draw(lightingShader);
+				}
+				else if (level.at(x, z) == 'B')
+				{
+					glm::mat4 model = glm::mat4(1.0f);
+					model = glm::translate(model, glm::vec3((float)x, 0.0f, (float)z));
+					glm::vec3 scaleVector = glm::vec3(0.3f, 0.3f, 0.3f);
+					model = glm::scale(model, scaleVector);
+					lightingShader.setMat4("model", model);
+					ourModel.Draw(lightingShader);
 				}
 			}
 		}
