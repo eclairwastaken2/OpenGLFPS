@@ -158,6 +158,8 @@
     <ClCompile Include="input\callbacks.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="gl\shader.cpp" />
+    <ClCompile Include="renderer\levelRenderer.cpp" />
+    <ClCompile Include="renderer\renderer.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="world\level.cpp" />
   </ItemGroup>
@@ -172,6 +174,8 @@
     <ClInclude Include="gl\texture2d.h" />
     <ClInclude Include="gl\vertexArray.h" />
     <ClInclude Include="input\callbacks.h" />
+    <ClInclude Include="renderer\levelRenderer.h" />
+    <ClInclude Include="renderer\renderer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="gl\shader.h" />
     <ClInclude Include="shapes\Cube.h" />
