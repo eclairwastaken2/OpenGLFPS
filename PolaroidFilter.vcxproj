@@ -175,6 +175,7 @@
     <ClInclude Include="gl\vertexArray.h" />
     <ClInclude Include="input\callbacks.h" />
     <ClInclude Include="renderer\levelRenderer.h" />
+    <ClInclude Include="renderer\levelVisuals.h" />
     <ClInclude Include="renderer\renderer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="gl\shader.h" />

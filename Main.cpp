@@ -19,6 +19,7 @@
 #include "gl/texture2d.h"
 #include "gl/shader.h"
 #include "gl/model.h"
+#include "renderer/levelVisuals.h"
 #include "input/callbacks.h"
 #include "world/level.h"
 
@@ -72,6 +73,13 @@ int main() try
 	texture1.setWrap(GL_REPEAT, GL_REPEAT);
 	texture1.setFilter(GL_LINEAR, GL_LINEAR);
 
+	Texture2D woodTexture =
+		Texture2D::Builder()
+		.wrap(GL_REPEAT, GL_REPEAT)
+		.filter(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR)
+		.fromFile("container.jpg");
+
+
 	int w, h, channels;
 	unsigned char* data = stbi_load("container.jpg", &w, &h, &channels, 0);
 	texture1.upload(w, h, GL_RGB, data);
@@ -81,6 +89,11 @@ int main() try
 	lightingShader.setInt("material.specular", 1);
 
 	Model ourModel("resources/objects/backpack/backpack.obj");
+
+	LevelVisuals visuals;
+	visuals.cubeMesh = &cubeMesh;
+	visuals.propModel = &ourModel; 
+	visuals.woodTexture = &woodTexture; 
 	while (!glfwWindowShouldClose(window.get())) {
 		float currentFrame = static_cast<float>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
@@ -132,56 +145,56 @@ int main() try
 		lightingShader.setMat4("projection", projection);
 		lightingShader.setMat4("view", view);
 
-		texture1.bind(0);
-		for (int z = 0; z < level.getH(); z++)
-		{
-			for (int x = 0; x < level.getW(); x++)
-			{
-				//FLOOR
-				glm::mat4 floorModel = glm::mat4(1.0f);
-				floorModel = glm::translate(
-					floorModel,
-					glm::vec3(x + 0.5f, -6.0f, z + 0.5f)
-				);
-				lightingShader.setMat4("model", floorModel);
-				cubeMesh.draw(lightingShader);
+		//texture1.bind(0);
+		//for (int z = 0; z < level.getH(); z++)
+		//{
+		//	for (int x = 0; x < level.getW(); x++)
+		//	{
+		//		//FLOOR
+		//		glm::mat4 floorModel = glm::mat4(1.0f);
+		//		floorModel = glm::translate(
+		//			floorModel,
+		//			glm::vec3(x + 0.5f, -6.0f, z + 0.5f)
+		//		);
+		//		lightingShader.setMat4("model", floorModel);
+		//		cubeMesh.draw(lightingShader);
 
-				//CEILING
-				glm::mat4 ceilingModel = glm::mat4(1.0f);
-				ceilingModel = glm::translate(
-					ceilingModel,
-					glm::vec3(x + 0.5f, 6.0f, z + 0.5f)
-				);
+		//		//CEILING
+		//		glm::mat4 ceilingModel = glm::mat4(1.0f);
+		//		ceilingModel = glm::translate(
+		//			ceilingModel,
+		//			glm::vec3(x + 0.5f, 6.0f, z + 0.5f)
+		//		);
 
-				lightingShader.setMat4("model", ceilingModel);
-				cubeMesh.draw(lightingShader);
-			}
-		}
+		//		lightingShader.setMat4("model", ceilingModel);
+		//		cubeMesh.draw(lightingShader);
+		//	}
+		//}
 
 
-		for (int z = 0; z < level.getH(); z++)
-		{
-			for (int x = 0; x < level.getW(); x++)
-			{
-				if (level.at(x, z) == '#')
-				{
-					texture1.bind(0);
-					glm::mat4 model = glm::mat4(1.0f);
-					model = glm::translate(model, glm::vec3((float)x, 0.0f, (float)z));
-					lightingShader.setMat4("model", model);
-					cubeMesh.draw(lightingShader);
-				}
-				else if (level.at(x, z) == 'B')
-				{
-					glm::mat4 model = glm::mat4(1.0f);
-					model = glm::translate(model, glm::vec3((float)x, 0.0f, (float)z));
-					glm::vec3 scaleVector = glm::vec3(0.3f, 0.3f, 0.3f);
-					model = glm::scale(model, scaleVector);
-					lightingShader.setMat4("model", model);
-					ourModel.Draw(lightingShader);
-				}
-			}
-		}
+		//for (int z = 0; z < level.getH(); z++)
+		//{
+		//	for (int x = 0; x < level.getW(); x++)
+		//	{
+		//		if (level.at(x, z) == '#')
+		//		{
+		//			texture1.bind(0);
+		//			glm::mat4 model = glm::mat4(1.0f);
+		//			model = glm::translate(model, glm::vec3((float)x, 0.0f, (float)z));
+		//			lightingShader.setMat4("model", model);
+		//			cubeMesh.draw(lightingShader);
+		//		}
+		//		else if (level.at(x, z) == 'B')
+		//		{
+		//			glm::mat4 model = glm::mat4(1.0f);
+		//			model = glm::translate(model, glm::vec3((float)x, 0.0f, (float)z));
+		//			glm::vec3 scaleVector = glm::vec3(0.3f, 0.3f, 0.3f);
+		//			model = glm::scale(model, scaleVector);
+		//			lightingShader.setMat4("model", model);
+		//			ourModel.Draw(lightingShader);
+		//		}
+		//	}
+		//}
 
 		glfwSwapBuffers(window.get());
 		glfwPollEvents();
