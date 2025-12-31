@@ -155,6 +155,7 @@
     <ClCompile Include="core\window.cpp" />
     <ClCompile Include="geometry\cube.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="gl\model.cpp" />
     <ClCompile Include="input\callbacks.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="gl\shader.cpp" />

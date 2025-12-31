@@ -12,7 +12,7 @@ struct LevelVisuals
 	Texture2D* woodTexture; 
 };
 
-namespace TextureSlot
+enum TextureSlot : unsigned
 {
-	unsigned WOOD = 0;
+	WOOD = 0
 };
