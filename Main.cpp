@@ -127,7 +127,7 @@ int main() try
 	lightingShader.setInt("material.diffuse", 0);
 	lightingShader.setInt("material.specular", 1);
 
-	Model ourModel("resources/objects/backpack/backpack.obj");
+	Model ourModel("resources/objects/gems/source/gems.obj");
 
 	LevelVisuals visuals;
 	visuals.cubeMesh = &cubeMesh;
