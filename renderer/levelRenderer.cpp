@@ -12,6 +12,7 @@ void LevelRenderer::render(Level& level, Shader& shader)
 		for (int x = 0; x < level.getW(); x++)
 		{
 			//FLOOR
+			shader.setFloat("emissiveStrength", 0.0f);
 			glm::mat4 floorModel = glm::mat4(1.0f);
 			floorModel = glm::translate(
 				floorModel,
@@ -39,6 +40,7 @@ void LevelRenderer::render(Level& level, Shader& shader)
 		{
 			if (level.at(x, z) == '#')
 			{
+				shader.setFloat("emissiveStrength", 0.0f);
 				visuals.woodTexture->bind(0);
 				glm::mat4 model = glm::mat4(1.0f);
 				model = glm::translate(model, glm::vec3((float)x, 0.0f, (float)z));
@@ -47,6 +49,9 @@ void LevelRenderer::render(Level& level, Shader& shader)
 			}
 			else if (level.at(x, z) == 'B')
 			{
+				shader.use();
+				shader.setVec3("emissiveColor", glm::vec3(0.0f, 0.8f, 0.2f));
+				shader.setFloat("emissiveStrength", 0.5f);
 				glm::mat4 model = glm::mat4(1.0f);
 				model = glm::translate(model, glm::vec3((float)x, 0.0f, (float)z));
 				glm::vec3 scaleVector = glm::vec3(0.3f, 0.3f, 0.3f);

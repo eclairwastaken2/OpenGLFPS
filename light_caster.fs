@@ -29,6 +29,8 @@ in vec2 TexCoords;
 uniform vec3 viewPos;
 uniform Material material;
 uniform Light light;
+uniform vec3 emissiveColor; 
+uniform float emissiveStrength; 
 
 void main()
 {
@@ -61,7 +63,8 @@ void main()
     diffuse   *= attenuation;
     specular *= attenuation;   
         
-    vec3 result = ambient + diffuse + specular;
+    vec3 emissive = emissiveColor * emissiveStrength;
+    vec3 result = ambient + diffuse + specular + emissive;
     FragColor = vec4(result, 1.0);
 
 } 
