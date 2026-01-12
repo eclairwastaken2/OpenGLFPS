@@ -21,6 +21,9 @@ public:
 
 	void bind(GLuint unit = 0) const
 	{
+        if (id_ == 0)
+            return; // prevent crash
+
 		glActiveTexture(GL_TEXTURE0 + unit);
 		glBindTexture(GL_TEXTURE_2D, id_);
 	}

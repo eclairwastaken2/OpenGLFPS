@@ -62,6 +62,9 @@
     <None Include="light_caster.fs" />
     <None Include="C:\Users\user\Downloads\assimp-6.0.2\assimp-6.0.2\instalation\bin\assimp-vc145-mt.dll" />
     <None Include="C:\Users\user\Downloads\crystal_gems.glb" />
+    <None Include="blur.fs" />
+    <None Include="bloom_final.fs" />
+    <None Include="quad.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">

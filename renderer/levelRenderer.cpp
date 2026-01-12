@@ -6,7 +6,7 @@ LevelRenderer::LevelRenderer(const LevelVisuals& v) : visuals(v) {}
 
 void LevelRenderer::render(Level& level, Shader& shader)
 {
-	visuals.woodTexture->bind(TextureSlot::WOOD);
+	visuals.woodTexture -> bind(TextureSlot::WOOD);
 	for (int z = 0; z < level.getH(); z++)
 	{
 		for (int x = 0; x < level.getW(); x++)
@@ -41,7 +41,7 @@ void LevelRenderer::render(Level& level, Shader& shader)
 			if (level.at(x, z) == '#')
 			{
 				shader.setFloat("emissiveStrength", 0.0f);
-				visuals.woodTexture->bind(0);
+				visuals.woodTexture -> bind(0);
 				glm::mat4 model = glm::mat4(1.0f);
 				model = glm::translate(model, glm::vec3((float)x, 0.0f, (float)z));
 				shader.setMat4("model", model);
@@ -51,7 +51,7 @@ void LevelRenderer::render(Level& level, Shader& shader)
 			{
 				shader.use();
 				shader.setVec3("emissiveColor", glm::vec3(0.0f, 0.8f, 0.2f));
-				shader.setFloat("emissiveStrength", 0.7f);
+				shader.setFloat("emissiveStrength", 5.0f);
 				glm::mat4 model = glm::mat4(1.0f);
 				model = glm::translate(model, glm::vec3((float)x, 0.0f, (float)z));
 				glm::vec3 scaleVector = glm::vec3(0.2f, 0.2f, 0.2f);

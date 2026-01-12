@@ -1,5 +1,6 @@
 #version 330 core
-out vec4 FragColor;
+layout (location = 0) out vec4 FragColor; 
+layout (location = 1) out vec4 BrightColor; 
 
 struct Material {
     sampler2D diffuse;
@@ -31,6 +32,7 @@ uniform Material material;
 uniform Light light;
 uniform vec3 emissiveColor; 
 uniform float emissiveStrength; 
+uniform bool isEmissive; 
 
 void main()
 {
@@ -67,4 +69,12 @@ void main()
     vec3 result = ambient + diffuse + specular + emissive;
     FragColor = vec4(result, 1.0);
 
+    if (isEmissive)
+    {
+        BrightColor = vec4(emissive, 1.0); 
+    }
+    else
+    {
+        BrightColor = vec4(0.0, 0.0, 0.0, 1.0); 
+    }
 } 
