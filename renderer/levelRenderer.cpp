@@ -6,6 +6,7 @@ LevelRenderer::LevelRenderer(const LevelVisuals& v) : visuals(v) {}
 
 void LevelRenderer::render(Level& level, Shader& shader)
 {
+	shader.setInt("numPointLights", 1);
 	visuals.woodTexture -> bind(TextureSlot::WOOD);
 	for (int z = 0; z < level.getH(); z++)
 	{
@@ -33,7 +34,7 @@ void LevelRenderer::render(Level& level, Shader& shader)
 		}
 	}
 
-
+	int i = 0; 
 	for (int z = 0; z < level.getH(); z++)
 	{
 		for (int x = 0; x < level.getW(); x++)
@@ -58,6 +59,17 @@ void LevelRenderer::render(Level& level, Shader& shader)
 				model = glm::scale(model, scaleVector);
 				shader.setMat4("model", model);
 				visuals.propModel->Draw(shader);
+				shader.setVec3("pointLights[0].position", glm::vec3((float)x, 0.0f, (float)z));
+
+				shader.setVec3("pointLights[0].ambient", 0.1f, 0.0f, 0.2f);
+				shader.setVec3("pointLights[0].diffuse", 2.0f, 0.5f, 3.0f);
+				shader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+
+				shader.setFloat("pointLights[0].constant", 1.0f);
+				shader.setFloat("pointLights[0].linear", 0.14f);
+				shader.setFloat("pointLights[0].quadratic", 0.07f);
+				shader.setFloat("pointLights[0].quadratic", 0.07f);
+				i++; 
 			}
 		}
 	}

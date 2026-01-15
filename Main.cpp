@@ -49,13 +49,13 @@ void static setupStaticLighting(Shader& shader)
 {
 	shader.use();
 
-	shader.setVec3("light.ambient", 0.1f, 0.1f, 0.1f);
-	shader.setVec3("light.diffuse", 0.8f, 0.8f, 0.8f);
-	shader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+	shader.setVec3("flashlight.ambient", 0.1f, 0.1f, 0.1f);
+	shader.setVec3("flashlight.diffuse", 0.8f, 0.8f, 0.8f);
+	shader.setVec3("flashlight.specular", 1.0f, 1.0f, 1.0f);
 
-	shader.setFloat("light.constant", 1.0f);
-	shader.setFloat("light.linear", 0.09f);
-	shader.setFloat("light.quadratic", 0.032f);
+	shader.setFloat("flashlight.constant", 1.0f);
+	shader.setFloat("flashlight.linear", 0.09f);
+	shader.setFloat("flashlight.quadratic", 0.032f);
 
 	shader.setFloat("material.shininess", 32.0f);
 }
@@ -64,10 +64,10 @@ void static updateLightingPerFrame(Shader& shader, const Camera& camera)
 {
 	shader.use();
 
-	shader.setVec3("light.position", camera.Position);
-	shader.setVec3("light.direction", camera.Front);
-	shader.setFloat("light.cutOff", glm::cos(glm::radians(20.5f)));
-	shader.setFloat("light.outerCutOff", glm::cos(glm::radians(25.5f)));
+	shader.setVec3("flashlight.position", camera.Position);
+	shader.setVec3("flashlight.direction", camera.Front);
+	shader.setFloat("flashlight.cutOff", glm::cos(glm::radians(20.5f)));
+	shader.setFloat("flashlight.outerCutOff", glm::cos(glm::radians(25.5f)));
 
 	shader.setVec3("viewPos", camera.Position);
 
