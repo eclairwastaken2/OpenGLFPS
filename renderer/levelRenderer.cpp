@@ -50,9 +50,8 @@ void LevelRenderer::render(Level& level, Shader& shader)
 			}
 			else if (level.at(x, z) == 'B')
 			{
-				shader.use();
-				shader.setVec3("emissiveColor", glm::vec3(0.0f, 0.8f, 0.2f));
-				shader.setFloat("emissiveStrength", 5.0f);
+				shader.setVec3("emissiveColor", glm::vec3(1.0f, 0.8f, 0.1f));
+				shader.setFloat("emissiveStrength", 1.0f);
 				glm::mat4 model = glm::mat4(1.0f);
 				model = glm::translate(model, glm::vec3((float)x, 0.0f, (float)z));
 				glm::vec3 scaleVector = glm::vec3(0.2f, 0.2f, 0.2f);
@@ -61,14 +60,13 @@ void LevelRenderer::render(Level& level, Shader& shader)
 				visuals.propModel->Draw(shader);
 				shader.setVec3("pointLights[0].position", glm::vec3((float)x, 0.0f, (float)z));
 
-				shader.setVec3("pointLights[0].ambient", 0.1f, 0.0f, 0.2f);
-				shader.setVec3("pointLights[0].diffuse", 2.0f, 0.5f, 3.0f);
-				shader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+				shader.setVec3("pointLights[0].ambient", 1.0f, 0.8f, 0.1f);
+				shader.setVec3("pointLights[0].diffuse", 1.0f, 0.8f, 0.1f);
+				shader.setVec3("pointLights[0].specular", 1.0f, 0.8f, 0.1f);
 
 				shader.setFloat("pointLights[0].constant", 1.0f);
-				shader.setFloat("pointLights[0].linear", 0.14f);
-				shader.setFloat("pointLights[0].quadratic", 0.07f);
-				shader.setFloat("pointLights[0].quadratic", 0.07f);
+				shader.setFloat("pointLights[0].linear", 0.7f);
+				shader.setFloat("pointLights[0].quadratic", 1.8f);
 				i++; 
 			}
 		}
