@@ -167,7 +167,7 @@ int main() try
 		// move camera from input
 		cameraController.processKeyboard(window.get(), deltaTime);
 
-		constexpr float CAMERA_RADIUS = 0.1f; 
+		constexpr float CAMERA_RADIUS = 0.3f; 
 		glm::vec3 nextPos = camera.Position;
 
 		if (level.collides(nextPos.x, oldPos.z, CAMERA_RADIUS)) {

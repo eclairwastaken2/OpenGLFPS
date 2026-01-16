@@ -52,7 +52,7 @@ void LevelRenderer::render(Level& level, Shader& shader)
 				shader.setVec3("emissiveColor", glm::vec3(1.0f, 0.8f, 0.1f));
 				shader.setFloat("emissiveStrength", 1.0f);
 				glm::mat4 model = glm::mat4(1.0f);
-				model = glm::translate(model, glm::vec3((float)x, 0.0f, (float)z));
+				model = glm::translate(model, glm::vec3((float)x, -0.5f, (float)z));
 				glm::vec3 scaleVector = glm::vec3(0.2f, 0.2f, 0.2f);
 				model = glm::scale(model, scaleVector);
 				shader.setMat4("model", model);
