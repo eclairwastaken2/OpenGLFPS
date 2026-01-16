@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 namespace {
     std::vector<std::string> levelMap; 
@@ -32,7 +33,7 @@ void Level::loadFromFile(const std::string& path)
 
     H = levelMap.size();
     W = levelMap[0].size();
-    for (int i = 0; i < H; i++)for (int j = 0; j < W; j++)std::cout << levelMap[i][j] << std::endl; 
+    std::cout << W << " " << H << std::endl; 
 }
 
 
@@ -75,4 +76,33 @@ glm::vec3 Level::findSpawn() const
    
 
     throw std::runtime_error("No spawn point");
+}
+
+bool Level::collides(float x, float z, float radius) const
+{
+    int minX = static_cast<int>(std::floor(x - radius + 0.5f));
+    int maxX = static_cast<int>(std::floor(x + radius + 0.5f));
+    int minZ = static_cast<int>(std::floor(z - radius + 0.5f));
+    int maxZ = static_cast<int>(std::floor(z + radius + 0.5f));
+
+    for (int currZ = minZ; currZ <= maxZ; currZ++)
+    {
+        for(int currX = minX; currX <= maxX; currX++)
+        {
+            if (!isWall(currX, currZ))continue; 
+            float tileMinX = static_cast<float>(currX) - 0.5f;
+            float tileMaxX = static_cast<float>(currX) + 0.5f;
+            float tileMinZ = static_cast<float>(currZ) - 0.5f;
+            float tileMaxZ = static_cast<float>(currZ) + 0.5f;
+
+            float clampX = std::clamp(x, tileMinX, tileMaxX);
+            float clampZ = std::clamp(z, tileMinZ, tileMaxZ);
+
+            float distX = x - clampX;
+            float distZ = z - clampZ;
+
+            if ((distX * distX + distZ * distZ) < (radius * radius)) return true;
+        }
+    }
+    return false; 
 }

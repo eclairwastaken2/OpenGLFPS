@@ -167,15 +167,17 @@ int main() try
 		// move camera from input
 		cameraController.processKeyboard(window.get(), deltaTime);
 
-		if (level.isWall(camera.Position.x, camera.Position.z))
-		{
-			camera.Position.x = oldPos.x;
+		constexpr float CAMERA_RADIUS = 0.1f; 
+		glm::vec3 nextPos = camera.Position;
 
-			if (level.isWall(camera.Position.x, camera.Position.z))
-			{
-				camera.Position.z = oldPos.z;
-			}
+		if (level.collides(nextPos.x, oldPos.z, CAMERA_RADIUS)) {
+			nextPos.x = oldPos.x; 
 		}
+
+		if (level.collides(nextPos.x, nextPos.z, CAMERA_RADIUS)) {
+			nextPos.z = oldPos.z; 
+		}
+		camera.Position = nextPos;
 
 		glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

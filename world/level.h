@@ -8,6 +8,7 @@ public:
 	Level(const std::string& path); 
 	bool isWall(float x, float z) const; 
 	char at(int x, int z) const;
+	bool collides(float x, float z, float radius)const; 
 	glm::vec3 findSpawn() const; 
 
 	int getW(); 
