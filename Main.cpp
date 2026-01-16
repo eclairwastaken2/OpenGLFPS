@@ -84,7 +84,7 @@ void static updateLightingPerFrame(Shader& shader, const Camera& camera)
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
-Level level;
+Level level("assets/levels/level.txt");
 Camera camera(level.findSpawn());
 CameraController cameraController(camera, SCR_WIDTH / 2.0f, SCR_HEIGHT / 2.0f);
 
