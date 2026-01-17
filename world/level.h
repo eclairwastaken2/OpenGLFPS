@@ -12,6 +12,7 @@ public:
 	glm::vec3 findSpawn() const; 
 
 	int getW(); 
+	void set(int x, int z, char symbol); 
 	int getH(); 
 protected:
 	void loadFromFile(const std::string& path); 

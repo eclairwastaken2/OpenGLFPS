@@ -25,6 +25,7 @@
 #include "renderer/levelRenderer.h"
 #include "input/callbacks.h"
 #include "world/level.h"
+#include "world/player.h"
 
 #define GL_CHECK(x) \
     x; \
@@ -88,6 +89,7 @@ void static updateLightingPerFrame(Shader& shader, const Camera& camera)
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
+Player player;
 Level level("assets/levels/level.txt");
 Camera camera(level.findSpawn());
 CameraController cameraController(camera, SCR_WIDTH / 2.0f, SCR_HEIGHT / 2.0f);
@@ -139,6 +141,8 @@ int main() try
 	Shader lightingShader("light_caster.vs", "light_caster.fs");
 	setupStaticLighting(lightingShader);
 
+		player.setPosition(level.findSpawn());
+
 
 	Mesh cubeMesh = MakeCube();
 
@@ -176,7 +180,9 @@ int main() try
 
 		glfwPollEvents();
 		// input
-		glm::vec3 oldPos = camera.Position;
+		player.setPosition(camera.Position);
+
+		glm::vec3 oldPos = camera.Position; 
 
 		// move camera from input
 		cameraController.processKeyboard(window.get(), deltaTime);
@@ -191,7 +197,10 @@ int main() try
 		if (level.collides(nextPos.x, nextPos.z, CAMERA_RADIUS)) {
 			nextPos.z = oldPos.z; 
 		}
+		player.setPosition(nextPos); 
 		camera.Position = nextPos;
+		player.tryCollect(level);
+
 
 		glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

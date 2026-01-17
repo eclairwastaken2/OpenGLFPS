@@ -45,6 +45,11 @@ char Level::at(int x, int z) const
     return levelMap[z][x];
 }
 
+void Level::set(int x, int z, char symbol)
+{
+    levelMap[z][x] = symbol; 
+}
+
 bool Level::isWall(float x, float z) const 
 {
     if (x < 0 || z < 0 || x >= W || z >= H)

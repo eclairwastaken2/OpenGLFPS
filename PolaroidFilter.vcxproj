@@ -200,6 +200,7 @@
     <ClInclude Include="shapes\Cube.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="world\level.h" />
+    <ClInclude Include="world\player.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
