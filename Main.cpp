@@ -5,6 +5,10 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
+
 #include <iostream>
 #include <stdexcept>
 
@@ -99,6 +103,15 @@ int main() try
 	{
 		throw std::runtime_error("Failed to init GLAD");
 	}
+
+	// init imgui
+	ImGui::CreateContext();
+	ImGui_ImplOpenGL3_Init();
+	ImGui_ImplGlfw_InitForOpenGL(window.get(), GL_TRUE);
+	ImGui::StyleColorsDark();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.WantSaveIniSettings = false;
+
 	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 	glEnable(GL_DEPTH_TEST);
 	unsigned int hdrFBO;
@@ -161,6 +174,7 @@ int main() try
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
+		glfwPollEvents();
 		// input
 		glm::vec3 oldPos = camera.Position;
 
@@ -198,8 +212,22 @@ int main() try
 		);
 
 
+
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
+		ImGui::Begin("Debug");
+		ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
+		ImGui::End();
+
+		ImGui::Render();
+
+		glDisable(GL_DEPTH_TEST);
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		glEnable(GL_DEPTH_TEST);
+
 		glfwSwapBuffers(window.get());
-		glfwPollEvents();
 	}
 	return 0;
 }
