@@ -40,9 +40,20 @@ void Level::loadFromFile(const std::string& path)
 char Level::at(int x, int z) const 
 {
     //return '.';
+    if (!inBounds(x, z)) return '#';
     if (z < 0 || z >= H || x < 0 || x >= W)
         throw std::out_of_range("Level::at out of bounds");
     return levelMap[z][x];
+}
+
+bool Level::inBounds(int x, int z) const
+{
+    if (z < 0 || z >= H || x < 0 || x >= W)
+    {
+        return false; 
+    }
+
+    return true; 
 }
 
 void Level::set(int x, int z, char symbol)

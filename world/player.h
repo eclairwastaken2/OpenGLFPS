@@ -8,13 +8,37 @@ class Player
 public:
 	void tryCollect(Level& level) const
 	{
-		int x = static_cast<int>(std::floor(position.x)); 
-		int z = static_cast<int>(std::floor(position.z)); 
+		int px = static_cast<int>(std::floor(position.x)); 
+		int pz = static_cast<int>(std::floor(position.z)); 
 
-		if (level.at(x, z) == 'B')
+		for (int dz = -1; dz <= 1; dz++)
 		{
-			level.set(x, z, '.'); 
+			for (int dx = -1; dx <= 1; dx++)
+			{
+				int x = px + dx; 
+				int z = pz + dz;
+
+				if (!level.inBounds(x, z)) continue; 
+
+				if (level.at(x, z) == 'B')
+				{
+					glm::vec3 gemPos(x, position.y, z); 
+
+					float dist = glm::length(position - gemPos); 
+
+					if (dist <= radius)
+					{
+						level.set(x, z, '.'); 
+				
+					}
+				}
+			}
 		}
+
+		//if (level.at(x, z) == 'B')
+		//{
+		//	level.set(x, z, '.'); 
+		//}
 	}
 
 	void setPosition(glm::vec3 newPosition) 
@@ -28,5 +52,5 @@ public:
 	}
 private:
 	glm::vec3 position; 
-	float radius = 0.3f; 
+	float radius = 0.6f; 
 };
