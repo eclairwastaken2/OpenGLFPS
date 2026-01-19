@@ -172,6 +172,12 @@
     <ClCompile Include="world\level.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="animation\animation.h" />
+    <ClInclude Include="animation\animator.h" />
+    <ClInclude Include="animation\animdata.h" />
+    <ClInclude Include="animation\assimp_glm_helpers.h" />
+    <ClInclude Include="animation\bone.h" />
+    <ClInclude Include="animation\model_animation.h" />
     <ClInclude Include="camera\camera.h" />
     <ClInclude Include="camera\cameraController.h" />
     <ClInclude Include="core\window.h" />
