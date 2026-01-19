@@ -12,6 +12,8 @@
 #include <iostream>
 #include <stdexcept>
 
+#include "animation/animator.h"
+#include "animation/model_animation.h"
 #include "camera/camera.h"
 #include "camera/cameraController.h"
 #include "core/window.h"
@@ -173,10 +175,19 @@ int main() try
 	visuals.woodTexture = &woodTexture; 
 
 	LevelRenderer renderer(visuals); 
+
+	//animation models
+	Shader animationShader("animation/anim_model.vs", "animation/anim_model.fs");
+	Model animationModel("resources/objects/vampire/dancing_vampire.dae");
+	Animation danceAnimation("resources/objects/vampire/dancing_vampire.dae", &animationModel);
+	Animator animator(&danceAnimation);
 	while (!glfwWindowShouldClose(window.get())) {
 		float currentFrame = static_cast<float>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
+
+		animator.UpdateAnimation(deltaTime);
+
 
 		glfwPollEvents();
 		// input
@@ -205,6 +216,28 @@ int main() try
 		glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		//animation
+		animationShader.use();
+
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		glm::mat4 view = camera.GetViewMatrix();
+		animationShader.setMat4("projection", projection);
+		animationShader.setMat4("view", view);
+
+		auto transforms = animator.GetFinalBoneMatrices();
+		for (int i = 0; i < transforms.size(); ++i)
+			animationShader.setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
+
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, camera.Position + camera.Front * 3.0f);
+		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
+
+		model = glm::scale(model, glm::vec3(.5f, .5f, .5f));
+		animationShader.setMat4("model", model);
+		animationModel.Draw(animationShader);
+
+		//lighting
 
 		updateLightingPerFrame(lightingShader, camera);
 
