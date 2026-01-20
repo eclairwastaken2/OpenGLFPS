@@ -8,7 +8,7 @@ class LevelRenderer
 public:
 	explicit LevelRenderer(const LevelVisuals& visuals); 
 
-	void render(Level& level, Shader& shader); 
+	void render(Level& level); 
 
 private:
 	const LevelVisuals& visuals; 

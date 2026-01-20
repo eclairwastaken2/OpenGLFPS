@@ -169,24 +169,31 @@ int main() try
 
 	Model ourModel("resources/objects/gems/source/gems.obj");
 
-	LevelVisuals visuals;
-	visuals.cubeMesh = &cubeMesh;
-	visuals.propModel = &ourModel; 
-	visuals.woodTexture = &woodTexture; 
-
-	LevelRenderer renderer(visuals); 
-
 	//animation models
 	Shader animationShader("animation/anim_model.vs", "animation/anim_model.fs");
 	Model animationModel("resources/objects/vampire/dancing_vampire.dae");
 	Animation danceAnimation("resources/objects/vampire/dancing_vampire.dae", &animationModel);
 	Animator animator(&danceAnimation);
+
+	LevelVisuals visuals;
+	visuals.cubeMesh = &cubeMesh;
+	visuals.propModel = &ourModel; 
+	visuals.woodTexture = &woodTexture; 
+	visuals.animationModel = &animationModel; 
+	visuals.animation = &danceAnimation; 
+	visuals.animator = &animator; 
+	visuals.lightingShader = &lightingShader; 
+	visuals.animationShader = &animationShader; 
+
+	LevelRenderer renderer(visuals); 
+
+
 	while (!glfwWindowShouldClose(window.get())) {
 		float currentFrame = static_cast<float>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		animator.UpdateAnimation(deltaTime);
+		//animator.UpdateAnimation(deltaTime);
 
 
 		glfwPollEvents();
@@ -218,7 +225,7 @@ int main() try
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//animation
-		animationShader.use();
+		/*animationShader.use();
 
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		glm::mat4 view = camera.GetViewMatrix();
@@ -235,13 +242,15 @@ int main() try
 
 		model = glm::scale(model, glm::vec3(.5f, .5f, .5f));
 		animationShader.setMat4("model", model);
-		animationModel.Draw(animationShader);
+		animationModel.Draw(animationShader);*/
 
 		//lighting
 
 		updateLightingPerFrame(lightingShader, camera);
+		updateLightingPerFrame(animationShader, camera); 
 
-		renderer.render(level, lightingShader); 
+		//Render
+		renderer.render(level); 
 
 		glBindFramebuffer(GL_READ_FRAMEBUFFER, hdrFBO);
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
