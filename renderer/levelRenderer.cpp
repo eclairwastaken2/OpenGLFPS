@@ -12,6 +12,7 @@ void LevelRenderer::render(Level& level)
 		for (int x = 0; x < level.getW(); x++)
 		{
 			//FLOOR
+			visuals.lightingShader->use();
 			visuals.lightingShader->setFloat("emissiveStrength", 0.0f);
 			glm::mat4 floorModel = glm::mat4(1.0f);
 			floorModel = glm::translate(
@@ -40,6 +41,7 @@ void LevelRenderer::render(Level& level)
 		{
 			if (level.at(x, z) == '#')
 			{
+				visuals.lightingShader->use();
 				visuals.lightingShader->setFloat("emissiveStrength", 0.0f);
 				visuals.woodTexture -> bind(0);
 				glm::mat4 model = glm::mat4(1.0f);
@@ -49,6 +51,7 @@ void LevelRenderer::render(Level& level)
 			}
 			else if (level.at(x, z) == 'B')
 			{
+				visuals.lightingShader->use();
 				visuals.lightingShader->setVec3("emissiveColor", glm::vec3(1.0f, 0.8f, 0.1f));
 				visuals.lightingShader->setFloat("emissiveStrength", 1.0f);
 				glm::mat4 model = glm::mat4(1.0f);
@@ -80,10 +83,10 @@ void LevelRenderer::render(Level& level)
 					visuals.animationShader->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
 
 				glm::mat4 model = glm::mat4(1.0f);
-				model = glm::translate(model, glm::vec3((float)x, 0.0f, (float)z));
+				model = glm::translate(model, glm::vec3((float)x, -2.0f, (float)z));
 				//model = glm::translate(model, glm::vec3(0.0f, -3.0f, 0.0f));
 
-				model = glm::scale(model, glm::vec3(.5f, .5f, .5f));
+				model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 				visuals.animationShader->setMat4("model", model);
 				visuals.animationModel->Draw(*visuals.animationShader);
 			}

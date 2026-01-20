@@ -193,7 +193,7 @@ int main() try
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		//animator.UpdateAnimation(deltaTime);
+		animator.UpdateAnimation(deltaTime);
 
 
 		glfwPollEvents();
@@ -225,13 +225,13 @@ int main() try
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//animation
-		/*animationShader.use();
+		animationShader.use();
 
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		glm::mat4 view = camera.GetViewMatrix();
 		animationShader.setMat4("projection", projection);
 		animationShader.setMat4("view", view);
-
+		/*
 		auto transforms = animator.GetFinalBoneMatrices();
 		for (int i = 0; i < transforms.size(); ++i)
 			animationShader.setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
@@ -247,7 +247,6 @@ int main() try
 		//lighting
 
 		updateLightingPerFrame(lightingShader, camera);
-		updateLightingPerFrame(animationShader, camera); 
 
 		//Render
 		renderer.render(level); 
