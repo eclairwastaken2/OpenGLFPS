@@ -157,11 +157,11 @@ int main() try
 		Texture2D::Builder()
 		.wrap(GL_REPEAT, GL_REPEAT)
 		.filter(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR)
-		.fromFile("../Assets/texture/container.jpg");
+		.fromFile("../Assets/textures/container.jpg");
 
 
 	int w, h, channels;
-	unsigned char* data = stbi_load("../Assets/texture/container.jpg", &w, &h, &channels, 0);
+	unsigned char* data = stbi_load("../Assets/textures/container.jpg", &w, &h, &channels, 0);
 	texture1.upload(w, h, GL_RGB, data);
 	stbi_image_free(data);
 	lightingShader.use();
@@ -171,7 +171,7 @@ int main() try
 	Model ourModel("../Assets/resources/objects/gems/source/gems.obj");
 
 	//animation models
-	Shader animationShader("animation/anim_model.vs", "animation/anim_model.fs");
+	Shader animationShader("../Assets/animation/anim_model.vs", "../Assets/animation/anim_model.fs");
 	Model animationModel("../Assets/resources/objects/vampire/dancing_vampire.dae");
 	Animation danceAnimation("../Assets/resources/objects/vampire/dancing_vampire.dae", &animationModel);
 	Animator animator(&danceAnimation);
