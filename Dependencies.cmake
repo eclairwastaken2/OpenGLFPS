@@ -23,21 +23,13 @@ endif()
 find_package(OpenGL REQUIRED)
 
 # GLAD
-FetchContent_Declare(
-    glad
-    DOWNLOAD_EXTRACT_TIMESTAMP OFF
-    URL https://github.com/Dav1dde/glad/archive/refs/tags/v2.0.8.zip
+add_library(glad STATIC 
+    "${CMAKE_CURRENT_SOURCE_DIR}/vendor/glad/glad.c"
 )
 
-FetchContent_GetProperties(glad)
-if(NOT glad_POPULATED)
-    set(FETCHCONTENT_QUIET NO)
-    FetchContent_MakeAvailable(glad)
-
-    add_subdirectory("${glad_SOURCE_DIR}/cmake" glad_cmake)
-    glad_add_library(glad REPRODUCIBLE EXCLUDE_FROM_ALL LOADER API gl:core=4.6)
-endif()
-set_target_properties(glad PROPERTIES FOLDER "Dependencies")
+target_include_directories(glad PUBLIC 
+    "${CMAKE_CURRENT_SOURCE_DIR}/vendor/glad/include"
+)
 
 # GLM
 find_package(glm 1.0.1 QUIET)

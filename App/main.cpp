@@ -93,7 +93,7 @@ void static updateLightingPerFrame(Shader& shader, const Camera& camera)
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 Player player;
-Level level("Assets/levels/level.txt");
+Level level("../Assets/levels/level.txt");
 Camera camera(level.findSpawn());
 CameraController cameraController(camera, SCR_WIDTH / 2.0f, SCR_HEIGHT / 2.0f);
 
@@ -104,7 +104,7 @@ int main() try
 
 	registerCallbacks(window.get());
 	glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	if (!gladLoadGL())
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		throw std::runtime_error("Failed to init GLAD");
 	}
@@ -140,8 +140,8 @@ int main() try
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "Framebuffer not complete!" << std::endl;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	Shader shader("vertex.vs", "frag.fs");
-	Shader lightingShader("light_caster.vs", "light_caster.fs");
+	Shader shader("../Assets/shaders/vertex.vs", "../Assets/shaders/frag.fs");
+	Shader lightingShader("../Assets/shaders/light_caster.vs", "../Assets/shaders/light_caster.fs");
 	setupStaticLighting(lightingShader);
 
 		player.setPosition(level.findSpawn());
@@ -157,23 +157,23 @@ int main() try
 		Texture2D::Builder()
 		.wrap(GL_REPEAT, GL_REPEAT)
 		.filter(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR)
-		.fromFile("container.jpg");
+		.fromFile("../Assets/texture/container.jpg");
 
 
 	int w, h, channels;
-	unsigned char* data = stbi_load("container.jpg", &w, &h, &channels, 0);
+	unsigned char* data = stbi_load("../Assets/texture/container.jpg", &w, &h, &channels, 0);
 	texture1.upload(w, h, GL_RGB, data);
 	stbi_image_free(data);
 	lightingShader.use();
 	lightingShader.setInt("material.diffuse", 0);
 	lightingShader.setInt("material.specular", 1);
 
-	Model ourModel("resources/objects/gems/source/gems.obj");
+	Model ourModel("../Assets/resources/objects/gems/source/gems.obj");
 
 	//animation models
 	Shader animationShader("animation/anim_model.vs", "animation/anim_model.fs");
-	Model animationModel("resources/objects/vampire/dancing_vampire.dae");
-	Animation danceAnimation("resources/objects/vampire/dancing_vampire.dae", &animationModel);
+	Model animationModel("../Assets/resources/objects/vampire/dancing_vampire.dae");
+	Animation danceAnimation("../Assets/resources/objects/vampire/dancing_vampire.dae", &animationModel);
 	Animator animator(&danceAnimation);
 
 	LevelVisuals visuals;
