@@ -2,7 +2,7 @@
 #include "glad/glad.h"
 #include <string>
 #include <stdexcept>
-#include "../stb_image.h"
+#include "stb/stb_image.h"
 
 class Texture2D
 {

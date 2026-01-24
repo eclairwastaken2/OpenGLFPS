@@ -1,0 +1,23 @@
+cmake_minimum_required(VERSION 3.16)
+
+set(SOURCES
+vendor/stb/stb_image.h
+vendor/stb/stb_image.cpp
+)
+
+add_library(Core STATIC)
+
+target_sources(Core PRIVATE ${SOURCES})
+
+# Match VS filters to directory structure on disk
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${SOURCES})
+
+add_compile_definitions(
+    GLFW_INCLUDE_NONE
+)
+
+target_link_libraries(glfw)
+target_link_libraries(glad)
+target_link_libraries(glm)
+
+target_include_directories(Core PUBLIC "Source" "stb")

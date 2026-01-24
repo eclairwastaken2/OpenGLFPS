@@ -18,10 +18,12 @@ source_group(
     FILES ${CORE_SOURCES}
 )
 
-
 target_link_libraries(Core
-    PUBLIC
+    PUBLIC 
         glad
+        glfw
+        glm
         imgui
         stb
+        assimp
 )

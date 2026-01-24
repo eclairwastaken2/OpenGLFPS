@@ -1,11 +1,11 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-#include "imgui/imgui.h"
+#include <imgui/imgui.h>
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 
@@ -16,7 +16,7 @@
 #include "animation/model_animation.h"
 #include "camera/camera.h"
 #include "camera/cameraController.h"
-#include "core/window.h"
+#include "window.h"
 #include "geometry/cube.h"
 #include "gl/mesh.h"
 #include "gl/vertexArray.h"
@@ -28,6 +28,7 @@
 #include "input/callbacks.h"
 #include "world/level.h"
 #include "world/player.h"
+#include "../build/_deps/assimp-src/contrib/stb/stb_image.h"
 
 #define GL_CHECK(x) \
     x; \
@@ -92,7 +93,7 @@ void static updateLightingPerFrame(Shader& shader, const Camera& camera)
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 Player player;
-Level level("assets/levels/level.txt");
+Level level("Assets/levels/level.txt");
 Camera camera(level.findSpawn());
 CameraController cameraController(camera, SCR_WIDTH / 2.0f, SCR_HEIGHT / 2.0f);
 
@@ -103,7 +104,7 @@ int main() try
 
 	registerCallbacks(window.get());
 	glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	if (!gladLoadGL())
 	{
 		throw std::runtime_error("Failed to init GLAD");
 	}
@@ -260,8 +261,6 @@ int main() try
 			GL_COLOR_BUFFER_BIT,
 			GL_NEAREST
 		);
-
-
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
