@@ -193,6 +193,9 @@
     <ClInclude Include="animation\model_animation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="world\enemies.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PolaroidFilter.rc">

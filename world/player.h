@@ -35,10 +35,6 @@ public:
 			}
 		}
 
-		//if (level.at(x, z) == 'B')
-		//{
-		//	level.set(x, z, '.'); 
-		//}
 	}
 
 	void setPosition(glm::vec3 newPosition) 
