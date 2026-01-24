@@ -1,11 +1,10 @@
-# Visual Studio
 .vs/
-*.suo
-*.user
-
-# Build outputs
 Debug/
 Release/
-*.obj
-*.exe
-*.pdb
+x64/
+build/
+
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
