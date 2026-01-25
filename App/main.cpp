@@ -171,7 +171,7 @@ int main() try
 	Model ourModel("../Assets/resources/objects/gems/source/gems.obj");
 
 	//animation models
-	Shader animationShader("../Assets/animation/anim_model.vs", "../Assets/animation/anim_model.fs");
+	Shader animationShader("../Assets/shaders/anim_model.vs", "../Assets/shaders/anim_model.fs");
 	Model animationModel("../Assets/resources/objects/vampire/dancing_vampire.dae");
 	Animation danceAnimation("../Assets/resources/objects/vampire/dancing_vampire.dae", &animationModel);
 	Animator animator(&danceAnimation);
