@@ -10,9 +10,12 @@ set(APP_SOURCES
     "world/level.cpp"
     "world/level.h"
     "world/player.h"
+    "game/gameLayer.cpp"
+    "game/gameLayer.h"
+
 )
 
-target_sources(App PRIVATE ${APP_SOURCES})
+target_sources(App PRIVATE ${APP_SOURCES} "game/gameLayer.cpp")
 
 target_include_directories(App
     PUBLIC
