@@ -2,10 +2,10 @@ add_executable(App)
 
 set(APP_SOURCES
     "main.cpp"
-    "renderer/drawCommand.h"
-    "renderer/levelRenderer.cpp"
-    "renderer/levelRenderer.h"
-    "renderer/levelVisuals.h"
+    "worldDraw/drawCommand.h"
+    "worldDraw/levelRenderer.cpp"
+    "worldDraw/levelRenderer.h"
+    "worldDraw/levelVisuals.h"
     "world/enemies.h"
     "world/level.cpp"
     "world/level.h"
