@@ -232,18 +232,6 @@ int main() try
 		glm::mat4 view = camera.GetViewMatrix();
 		animationShader.setMat4("projection", projection);
 		animationShader.setMat4("view", view);
-		/*
-		auto transforms = animator.GetFinalBoneMatrices();
-		for (int i = 0; i < transforms.size(); ++i)
-			animationShader.setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
-
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, camera.Position + camera.Front * 3.0f);
-		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
-
-		model = glm::scale(model, glm::vec3(.5f, .5f, .5f));
-		animationShader.setMat4("model", model);
-		animationModel.Draw(animationShader);*/
 
 		//lighting
 
