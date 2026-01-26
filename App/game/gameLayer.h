@@ -11,14 +11,21 @@
 #include "worldDraw/levelRenderer.h"
 #include "worldDraw/levelVisuals.h"
 
-class GameLayer
+#include "application/layer.h"
+#include "application/inputEvents.h"
+#include "application/windowEvents.h"
+
+
+class GameLayer : public Core::Layer
 {
 public:
-    GameLayer(int width, int height, GLFWwindow* window);
+    GameLayer();
+    virtual ~GameLayer(); 
 
-    void OnUpdate(float dt);
-    void OnRender();
-    void OnImGuiRender();
+    virtual void OnEvent(Core::Event& event);
+       
+    virtual void OnUpdate(float ts) override;
+    virtual void OnRender() override;
 
 private:
     GLFWwindow* m_Window;

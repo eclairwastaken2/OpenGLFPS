@@ -1,7 +1,3 @@
-#pragma once
-#include <vector>
-#include "vertexArray.h"
-#include "buffer.h"
 #ifndef MESH_H
 #define MESH_H
 
@@ -61,9 +57,8 @@ public:
     }
 
     // render the mesh
-    void draw(Shader& shader)
+    void Draw(Shader& shader)
     {
-        shader.use();
         // bind appropriate textures
         unsigned int diffuseNr = 1;
         unsigned int specularNr = 1;

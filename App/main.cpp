@@ -1,5 +1,5 @@
 #include "application/application.h"
-
+#include "game/gameLayer.h"
 
 int main()
 {
@@ -9,5 +9,6 @@ int main()
 	appSpec.WindowSpec.Height = 1080;
 
 	Core::Application application(appSpec);
+	application.PushLayer<GameLayer>();
 	application.Run();
 }

@@ -6,7 +6,14 @@ file(GLOB_RECURSE CORE_SOURCES
     "*.hpp"
 )
 
-target_sources(Core PRIVATE ${CORE_SOURCES} "application/application.h" "application/application.cpp"   "application/event.h" "application/layer.cpp" "application/layer.h" "application/windowEvents.h"  )
+target_sources(Core PRIVATE ${CORE_SOURCES} 
+"application/application.h" 
+"application/application.cpp"   
+"application/event.h" 
+"application/layer.cpp" 
+"application/layer.h" 
+"application/windowEvents.h"   
+"renderer/frameBuffer.h")
 
 target_include_directories(Core
     PUBLIC
