@@ -15,6 +15,7 @@
 
 #include "worldDraw/levelRenderer.h"
 #include "worldDraw/levelVisuals.h"
+#include <memory>
 
 
 class GameLayer : public Core::Layer
@@ -25,6 +26,7 @@ public:
 
     //virtual void onEvent(Core::Event& event) override;
     //virtual void onUpdate(float ts) override; 
+    virtual void onAttach();
     virtual void onRender() override; 
 
 private:
@@ -32,25 +34,25 @@ private:
     void updateLighting();
 
 private:
-    // World
-    Level level_;
-    Player player_;
+    //// World
+    //Level level_;
+    //Player player_;
 
-    // Camera
-    Camera camera_;
-    CameraController cameraController_;
+    //// Camera
+    //Camera camera_;
+    //CameraController cameraController_;
 
-    // Rendering
-    Shader lightingShader_;
-    Shader animationShader_;
+    //// Rendering
+    //std::unique_ptr<Shader> lightingShader_;
+    //std::unique_ptr<Shader> animationShader_;
 
-    LevelVisuals visuals_;
-    LevelRenderer renderer_;
+    //LevelVisuals visuals_;
+    //LevelRenderer renderer_;
 
-    // Animation
-    Animation danceAnimation_;
-    Animator animator_;
+    //// Animation
+    //Animation danceAnimation_;
+    //Animator animator_;
 
-    // Timing
-    float lastFrame_ = 0.0f;
+    //// Timing
+    //float lastFrame_ = 0.0f;
 };
