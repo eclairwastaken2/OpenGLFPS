@@ -11,10 +11,10 @@ namespace Core {
 	public:
 		virtual ~Layer() = default;
 
-		virtual void OnEvent(Event& event) {}
+		virtual void onEvent(Event& event) {}
 
-		virtual void OnUpdate(float ts) {}
-		virtual void OnRender() {}
+		virtual void onUpdate(float ts) {}
+		virtual void onRender() {}
 
 		template<std::derived_from<Layer> T, typename... Args>
 		void TransitionTo(Args&&... args)

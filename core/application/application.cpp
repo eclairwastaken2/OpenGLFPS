@@ -68,11 +68,11 @@ namespace Core {
 
 			// Main layer update here
 			for (const std::unique_ptr<Layer>& layer : m_LayerStack)
-				layer->OnUpdate(timestep);
+				layer->onUpdate(timestep);
 
 			// NOTE: rendering can be done elsewhere (eg. render thread)
 			for (const std::unique_ptr<Layer>& layer : m_LayerStack)
-				layer->OnRender();
+				layer->onRender();
 
 			m_Window->Update();
 		}
@@ -87,7 +87,7 @@ namespace Core {
 	{
 		for (auto& layer : std::views::reverse(m_LayerStack))
 		{
-			layer->OnEvent(event);
+			layer->onEvent(event);
 			if (event.Handled)
 				break;
 		}

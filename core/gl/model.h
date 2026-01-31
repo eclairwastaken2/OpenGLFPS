@@ -19,8 +19,8 @@
 #include <iostream>
 #include <map>
 #include <vector>
-#include "assimp_glm_helpers.h"
-#include "animdata.h"
+#include "animation/assimp_glm_helpers.h"
+#include "animation/animdata.h"
 
 using namespace std;
 
