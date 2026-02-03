@@ -19,15 +19,17 @@ public:
     GameLayer();
     virtual ~GameLayer(); 
 
-  /*  virtual void onEvent(Core::Event& event) override;
-    virtual void onUpdate(float ts) override; */
+    virtual void onEvent(Core::Event& event) override;
+    virtual void onUpdate(float ts) override; 
     virtual void onRender() override; 
 
 private:
     void setupLighting();
-    void updateLighting(Shader& shader, const Camera& camera);
+    void updateLighting();
 
 private:
+
+    Player player_; 
     //// World
     Level level_;
     Mesh cubeMesh_;
@@ -39,6 +41,9 @@ private:
     //// Camera
     Camera camera_;
     CameraController cameraController_;
+
+    bool OnMouseMoved(Core::MouseMovedEvent& event);
+
 
     //// Rendering
     //std::unique_ptr<Shader> lightingShader_;

@@ -13,32 +13,32 @@ namespace Core {
 	class KeyEvent : public Event
 	{
 	public:
-		inline int GetKeyCode() const { return m_KeyCode; }
+		inline int GetKeyCode() const { return keyCode_; }
 	protected:
 		KeyEvent(int keycode)
-			: m_KeyCode(keycode) {
+			: keyCode_(keycode) {
 		}
 
-		int m_KeyCode;
+		int keyCode_;
 	};
 
 	class KeyPressedEvent : public KeyEvent
 	{
 	public:
 		KeyPressedEvent(int keycode, bool isRepeat)
-			: KeyEvent(keycode), m_IsRepeat(isRepeat) {
+			: KeyEvent(keycode), isRepeat_(isRepeat) {
 		}
 
-		inline bool IsRepeat() const { return m_IsRepeat; }
+		inline bool IsRepeat() const { return isRepeat_; }
 
 		std::string ToString() const override
 		{
-			return std::format("KeyPressedEvent: {} (repeat={})", m_KeyCode, m_IsRepeat);
+			return std::format("KeyPressedEvent: {} (repeat={})", keyCode_, isRepeat_);
 		}
 
 		EVENT_CLASS_TYPE(KeyPressed)
 	private:
-		bool m_IsRepeat;
+		bool isRepeat_;
 	};
 
 	class KeyReleasedEvent : public KeyEvent
@@ -50,7 +50,7 @@ namespace Core {
 
 		std::string ToString() const override
 		{
-			return std::format("KeyReleasedEvent: {}", m_KeyCode);
+			return std::format("KeyReleasedEvent: {}", keyCode_);
 		}
 
 		EVENT_CLASS_TYPE(KeyReleased)
@@ -64,52 +64,52 @@ namespace Core {
 	{
 	public:
 		MouseMovedEvent(double x, double y)
-			: m_MouseX(x), m_MouseY(y) {
+			: mouseX_(x), mouseY_(y) {
 		}
 
-		inline double GetX() const { return m_MouseX; }
-		inline double GetY() const { return m_MouseY; }
+		inline double GetX() const { return mouseX_; }
+		inline double GetY() const { return mouseY_; }
 
 		std::string ToString() const override
 		{
-			return std::format("MouseMovedEvent: {}, {}", m_MouseX, m_MouseY);
+			return std::format("MouseMovedEvent: {}, {}", mouseX_, mouseY_);
 		}
 
 		EVENT_CLASS_TYPE(MouseMoved)
 	private:
-		double m_MouseX, m_MouseY;
+		double mouseX_, mouseY_;
 	};
 
 	class MouseScrolledEvent : public Event
 	{
 	public:
 		MouseScrolledEvent(double xOffset, double yOffset)
-			: m_XOffset(xOffset), m_YOffset(yOffset) {
+			: xOffset_(xOffset), yOffset_(yOffset) {
 		}
 
-		inline double GetXOffset() const { return m_XOffset; }
-		inline double GetYOffset() const { return m_YOffset; }
+		inline double GetXOffset() const { return xOffset_; }
+		inline double GetYOffset() const { return yOffset_; }
 
 		std::string ToString() const override
 		{
-			return std::format("MouseScrolledEvent: {}, {}", m_XOffset, m_YOffset);
+			return std::format("MouseScrolledEvent: {}, {}", xOffset_, yOffset_);
 		}
 
 		EVENT_CLASS_TYPE(MouseScrolled)
 	private:
-		double m_XOffset, m_YOffset;
+		double xOffset_, yOffset_;
 	};
 
 	class MouseButtonEvent : public Event
 	{
 	public:
-		inline int GetMouseButton() const { return m_Button; }
+		inline int GetMouseButton() const { return button_; }
 	protected:
 		MouseButtonEvent(int button)
-			: m_Button(button) {
+			: button_(button) {
 		}
 
-		int m_Button;
+		int button_;
 	};
 
 	class MouseButtonPressedEvent : public MouseButtonEvent
@@ -121,7 +121,7 @@ namespace Core {
 
 		std::string ToString() const override
 		{
-			return std::format("MouseButtonPressedEvent: {}", m_Button);
+			return std::format("MouseButtonPressedEvent: {}", button_);
 		}
 
 		EVENT_CLASS_TYPE(MouseButtonPressed)
@@ -136,7 +136,7 @@ namespace Core {
 
 		std::string ToString() const override
 		{
-			return std::format("MouseButtonReleasedEvent: {}", m_Button);
+			return std::format("MouseButtonReleasedEvent: {}", button_);
 		}
 
 		EVENT_CLASS_TYPE(MouseButtonReleased)

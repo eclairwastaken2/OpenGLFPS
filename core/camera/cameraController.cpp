@@ -1,42 +1,89 @@
 #include "cameraController.h"
 
 CameraController::CameraController(Camera& camera, float startX, float startY)
-	:camera_(camera), lastX(startX), lastY(startY) { }
+	:camera_(camera), lastX_(startX), lastY_(startY) { }
 
-void CameraController::processKeyboard(GLFWwindow* window, float deltaTime)
+void CameraController::onUpdate(float dt)
 {
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		camera_.ProcessKeyboard(FORWARD, deltaTime); 
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		camera_.ProcessKeyboard(BACKWARD, deltaTime); 
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		camera_.ProcessKeyboard(LEFT, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		camera_.ProcessKeyboard(RIGHT, deltaTime);
+    if (moveForward_)
+        camera_.ProcessKeyboard(FORWARD, dt);
+    if (moveBackward_)
+        camera_.ProcessKeyboard(BACKWARD, dt);
+    if (moveLeft_)
+        camera_.ProcessKeyboard(LEFT, dt);
+    if (moveRight_)
+        camera_.ProcessKeyboard(RIGHT, dt);
 }
 
-
-void CameraController::onMouseMove(double xposIn, double yposIn)
+void CameraController::onEvent(Core::Event& e)
 {
-    float xpos = static_cast<float>(xposIn);
-    float ypos = static_cast<float>(yposIn);
+    Core::EventDispatcher dispatcher(e);
 
-    if (firstMouse) {
-        lastX = xpos;
-        lastY = ypos;
-        firstMouse = false;
+    dispatcher.Dispatch<Core::MouseMovedEvent>(
+        [this](auto& e) { return onMouseMoved(e); });
+
+    dispatcher.Dispatch<Core::MouseScrolledEvent>(
+        [this](auto& e) { return onMouseScrolled(e); });
+
+    dispatcher.Dispatch<Core::KeyPressedEvent>(
+        [this](auto& e) { return onKeyPressed(e); });
+
+    dispatcher.Dispatch<Core::KeyReleasedEvent>(
+        [this](auto& e) { return onKeyReleased(e); });
+}
+
+bool CameraController::onMouseMoved(Core::MouseMovedEvent& e)
+{
+    float xpos = (float)e.GetX();
+    float ypos = (float)e.GetY();
+
+    if (firstMouse_)
+    {
+        lastX_ = xpos;
+        lastY_ = ypos;
+        firstMouse_ = false;
+        return false;
     }
 
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos;
+    float xoffset = xpos - lastX_;
+    float yoffset = lastY_ - ypos;
 
-    lastX = xpos;
-    lastY = ypos;
+    lastX_ = xpos;
+    lastY_ = ypos;
 
     camera_.ProcessMouseMovement(xoffset, yoffset);
+    return false;
 }
 
-void CameraController::onScroll(double yoffset)
+bool CameraController::onMouseScrolled(Core::MouseScrolledEvent& e)
 {
-    camera_.ProcessMouseScroll(static_cast<float>(yoffset));
+    camera_.ProcessMouseScroll((float)e.GetYOffset());
+    return false;
+}
+
+bool CameraController::onKeyPressed(Core::KeyPressedEvent& e)
+{
+    if (e.IsRepeat())
+        return false;
+
+    switch (e.GetKeyCode())
+    {
+    case GLFW_KEY_W: moveForward_ = true; break;
+    case GLFW_KEY_S: moveBackward_ = true; break;
+    case GLFW_KEY_A: moveLeft_ = true; break;
+    case GLFW_KEY_D: moveRight_ = true; break;
+    }
+    return false;
+}
+
+bool CameraController::onKeyReleased(Core::KeyReleasedEvent& e)
+{
+    switch (e.GetKeyCode())
+    {
+    case GLFW_KEY_W: moveForward_ = false; break;
+    case GLFW_KEY_S: moveBackward_ = false; break;
+    case GLFW_KEY_A: moveLeft_ = false; break;
+    case GLFW_KEY_D: moveRight_ = false; break;
+    }
+    return false;
 }

@@ -1,5 +1,5 @@
 #include "gameLayer.h"
-
+#include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 #include <imgui/imgui.h>
 #include <gl/mesh.h>
@@ -7,6 +7,8 @@
 #include <gl/shader.h>
 #include <geometry/cube.h>
 #include <glad/glad.h>
+#include <world/player.h>
+
 
 static constexpr float CAMERA_RADIUS = 0.3f;
 
@@ -25,28 +27,13 @@ GameLayer::GameLayer()
     )
     ,camera_(level_.findSpawn())
     , cameraController_(camera_, 1920 / 2.0f, 1080 / 2.0f)
+
 {
+    player_.setPosition(level_.findSpawn());
     glEnable(GL_DEPTH_TEST);
-
-
-    //player_.setPosition(level_.findSpawn());
-    //setupLighting();
     lightingShader_.use();
-
-    lightingShader_.setVec3("flashlight.ambient", 0.1f, 0.1f, 0.1f);
-    lightingShader_.setVec3("flashlight.diffuse", 0.8f, 0.8f, 0.8f);
-    lightingShader_.setVec3("flashlight.specular", 1.0f, 1.0f, 1.0f);
-
-    lightingShader_.setFloat("flashlight.constant", 1.0f);
-    lightingShader_.setFloat("flashlight.linear", 0.09f);
-    lightingShader_.setFloat("flashlight.quadratic", 0.032f);
-
-    lightingShader_.setFloat("material.shininess", 32.0f);
-    lightingShader_.setMat4("view", glm::mat4(1.0f));
-    lightingShader_.setMat4(
-        "projection",
-        glm::ortho(-10.f, 10.f, -10.f, 10.f, -10.f, 10.f)
-    );
+    //player_.setPosition(level_.findSpawn());
+    setupLighting();
 
 }
 
@@ -62,11 +49,12 @@ void GameLayer::onRender()
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    updateLighting(lightingShader_, camera_);
-    //lightingShader_.setMat4("model", glm::mat4(1.0f));
-    //cubeMesh_.draw(lightingShader_);
+    woodTexture_.bind(0);
 
-    //lightingShader_.use();
+    lightingShader_.use(); 
+    updateLighting();
+    std::cout << static_cast<float> (camera_.Position.x) << std::endl;
+
     for (int z = 0; z < level_.getH(); z++)
     {
         for (int x = 0; x < level_.getW(); x++)
@@ -82,23 +70,39 @@ void GameLayer::onRender()
             cubeMesh_.draw(lightingShader_);
         }
     }
-    lightingShader_.setMat4(
-        "model",
-        glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -3))
-    );
-    cubeMesh_.draw(lightingShader_);
 
+}
+
+void GameLayer::onUpdate(float dt)
+{
+    cameraController_.onUpdate(dt);
+}
+
+void GameLayer::onEvent(Core::Event& e)
+{
+    std::cout << e.ToString() << std::endl;
+    cameraController_.onEvent(e);
 }
 
 
 void GameLayer::setupLighting()
 {
+    lightingShader_.setVec3("flashlight.ambient", 0.1f, 0.1f, 0.1f);
+    lightingShader_.setVec3("flashlight.diffuse", 0.8f, 0.8f, 0.8f);
+    lightingShader_.setVec3("flashlight.specular", 1.0f, 1.0f, 1.0f);
 
+    lightingShader_.setFloat("flashlight.constant", 1.0f);
+    lightingShader_.setFloat("flashlight.linear", 0.09f);
+    lightingShader_.setFloat("flashlight.quadratic", 0.032f);
+
+    lightingShader_.setFloat("material.shininess", 32.0f);
+    lightingShader_.setInt("material.diffuse", 0);
+    lightingShader_.setInt("material.specular", 1);
 }
 
-void GameLayer::updateLighting(Shader& shader, const Camera& camera)
+
+void GameLayer::updateLighting()
 {
-    lightingShader_.use();
 
     lightingShader_.setVec3("flashlight.position", camera_.Position);
     lightingShader_.setVec3("flashlight.direction", camera_.Front);
