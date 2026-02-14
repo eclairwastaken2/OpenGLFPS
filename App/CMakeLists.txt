@@ -2,17 +2,20 @@ add_executable(App)
 
 set(APP_SOURCES
     "main.cpp"
-    "renderer/drawCommand.h"
-    "renderer/levelRenderer.cpp"
-    "renderer/levelRenderer.h"
-    "renderer/levelVisuals.h"
+    "worldDraw/drawCommand.h"
+    "worldDraw/levelRenderer.cpp"
+    "worldDraw/levelRenderer.h"
+    "worldDraw/levelVisuals.h"
     "world/enemies.h"
     "world/level.cpp"
     "world/level.h"
     "world/player.h"
+    "game/gameLayer.cpp"
+    "game/gameLayer.h"
+
 )
 
-target_sources(App PRIVATE ${APP_SOURCES})
+target_sources(App PRIVATE ${APP_SOURCES} "game/gameLayer.cpp")
 
 target_include_directories(App
     PUBLIC

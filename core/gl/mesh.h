@@ -1,7 +1,3 @@
-#pragma once
-#include <vector>
-#include "vertexArray.h"
-#include "buffer.h"
 #ifndef MESH_H
 #define MESH_H
 
@@ -48,6 +44,7 @@ public:
     vector<unsigned int> indices;
     vector<Texture>      textures;
     unsigned int VAO;
+    unsigned int instanceVBO = 0;
 
     // constructor
     Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures)
@@ -60,10 +57,20 @@ public:
         setupMesh();
     }
 
-    // render the mesh
-    void draw(Shader& shader)
+    void bind() const
     {
-        shader.use();
+        glBindVertexArray(VAO);
+    }
+
+    uint32_t indexCount() const
+    {
+        return static_cast<uint32_t>(indices.size());
+    }
+
+
+    // render the mesh
+    void draw(Shader& shader) const
+    {
         // bind appropriate textures
         unsigned int diffuseNr = 1;
         unsigned int specularNr = 1;
@@ -145,6 +152,36 @@ private:
         // weights
         glEnableVertexAttribArray(6);
         glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, m_Weights));
+        
+        glBindVertexArray(VAO);
+
+        glGenBuffers(1, &instanceVBO);
+        glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
+
+        // allocate empty buffer initially
+        glBufferData(GL_ARRAY_BUFFER,
+            1000 * sizeof(glm::mat4), 
+            nullptr,
+            GL_DYNAMIC_DRAW);
+
+        // locations 7,8,9,10 (mat4 = 4 vec4)
+        for (int i = 0; i < 4; i++)
+        {
+            glEnableVertexAttribArray(7 + i);
+
+            glVertexAttribPointer(
+                7 + i,
+                4,
+                GL_FLOAT,
+                GL_FALSE,
+                sizeof(glm::mat4),
+                (void*)(sizeof(glm::vec4) * i)
+            );
+
+            glVertexAttribDivisor(7 + i, 1); // advance per instance
+        }
+        glBindBuffer(GL_ARRAY_BUFFER, 0);   // ← ADD THIS
+
         glBindVertexArray(0);
     }
 };

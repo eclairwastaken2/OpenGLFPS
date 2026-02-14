@@ -67,7 +67,7 @@ public:
 			CalculateBoneTransform(&node->children[i], globalTransformation);
 	}
 
-	std::vector<glm::mat4> GetFinalBoneMatrices()
+	std::vector<glm::mat4> GetFinalBoneMatrices() const
 	{
 		return m_FinalBoneMatrices;
 	}

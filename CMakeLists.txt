@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(Dependencies.cmake)
 
+add_compile_options(/showIncludes)
+
 add_subdirectory(Core)
 add_subdirectory(App)
 
