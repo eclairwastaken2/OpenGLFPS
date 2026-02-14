@@ -38,7 +38,21 @@ void GameLayer::onRender()
 
 void GameLayer::onUpdate(float dt)
 {
-    cameraController_.onUpdate(dt);
+    glm::vec3 movement = cameraController_.getMovement(dt);
+
+    glm::vec3 pos = camera_.Position;
+
+    glm::vec3 tryX = pos;
+    tryX.x += movement.x;
+
+    if (!level_.collides(tryX.x, tryX.z, CAMERA_RADIUS))pos.x = tryX.x;
+
+    glm::vec3 tryZ = pos;
+    tryZ.z += movement.z;
+
+    if (!level_.collides(tryZ.x, tryZ.z, CAMERA_RADIUS))pos.z = tryZ.z;
+
+    camera_.Position = pos;
 }
 
 void GameLayer::onEvent(Core::Event& e)

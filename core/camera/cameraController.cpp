@@ -3,16 +3,23 @@
 CameraController::CameraController(Camera& camera, float startX, float startY)
 	:camera_(camera), lastX_(startX), lastY_(startY) { }
 
-void CameraController::onUpdate(float dt)
+
+glm::vec3 CameraController::getMovement(float dt) const
 {
-    if (moveForward_)
-        camera_.ProcessKeyboard(FORWARD, dt);
-    if (moveBackward_)
-        camera_.ProcessKeyboard(BACKWARD, dt);
-    if (moveLeft_)
-        camera_.ProcessKeyboard(LEFT, dt);
-    if (moveRight_)
-        camera_.ProcessKeyboard(RIGHT, dt);
+    glm::vec3 move(0.0f);
+
+    if (moveForward_)move += camera_.Front;
+
+    if (moveBackward_)move -= camera_.Front;
+
+    if (moveLeft_)move -= camera_.Right;
+
+    if (moveRight_)move += camera_.Right;
+
+    if (glm::length(move) > 0.0f)move = glm::normalize(move);
+
+    float speed = 5.0f; 
+    return move * speed * dt;
 }
 
 void CameraController::onEvent(Core::Event& e)
