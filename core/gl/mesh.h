@@ -180,7 +180,7 @@ private:
 
             glVertexAttribDivisor(7 + i, 1); // advance per instance
         }
-        glBindBuffer(GL_ARRAY_BUFFER, 0);   // ← ADD THIS
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         glBindVertexArray(0);
     }

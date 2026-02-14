@@ -15,7 +15,7 @@ set(APP_SOURCES
 
 )
 
-target_sources(App PRIVATE ${APP_SOURCES} "game/gameLayer.cpp")
+target_sources(App PRIVATE ${APP_SOURCES} "game/gameLayer.cpp" "world/gameObject.h" "world/tiles.h"  )
 
 target_include_directories(App
     PUBLIC

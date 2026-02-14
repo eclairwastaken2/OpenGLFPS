@@ -140,13 +140,6 @@ void Renderer::drawInstancedBatch(const Mesh& mesh,
         0,
         transforms.size()
     );
-
-    //glDrawElements(
-    //    GL_TRIANGLES,
-    //    mesh.indexCount(),
-    //    GL_UNSIGNED_INT,
-    //    0
-    //);
 }
 
 void Renderer::renderAnimatedPass()
