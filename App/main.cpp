@@ -4,7 +4,7 @@
 int main()
 {
 	Core::ApplicationSpecification appSpec;
-	appSpec.Name = "Tes3";
+	appSpec.Name = "Tes5";
 	appSpec.WindowSpec.Width = 1920;
 	appSpec.WindowSpec.Height = 1080;
 

@@ -20,11 +20,12 @@ target_sources(Core PRIVATE ${CORE_SOURCES}
 "gl/model.h"
 "gl/shader.cpp"
 "gl/shader.h"
-
+"renderer/entityRenderer.cpp"
+"renderer/entityRenderer.h"
 "gl/texturedModel.h"
 "gl/texture2d.h"
 
- "gl/rawModel.h")
+ "gl/rawModel.h" "gl/material.h" "gl/material.cpp")
 
 target_include_directories(Core
     PUBLIC

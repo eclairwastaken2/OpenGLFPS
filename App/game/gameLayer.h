@@ -7,11 +7,12 @@
 #include <gl/mesh.h>
 #include <gl/texture2d.h>
 #include <gl/shader.h>
+#include <gl/material.h>
 #include <geometry/cube.h>
 #include <glad/glad.h>
 #include "camera/camera.h"
 #include "camera/cameraController.h"
-
+#include "renderer/entityRenderer.h"
 
 class GameLayer : public Core::Layer
 {
@@ -33,29 +34,15 @@ private:
     //// World
     Level level_;
     Mesh cubeMesh_;
+    Material floorMaterial_; 
 
-    Texture2D woodTexture_;
-
-    Shader lightingShader_;
+    std::shared_ptr<Texture2D> woodTexture_;
  
     //// Camera
     Camera camera_;
     CameraController cameraController_;
+    
+    Renderer renderer_; 
 
     bool OnMouseMoved(Core::MouseMovedEvent& event);
-
-
-    //// Rendering
-    //std::unique_ptr<Shader> lightingShader_;
-    //std::unique_ptr<Shader> animationShader_;
-
-    //LevelVisuals visuals_;
-    //LevelRenderer renderer_;
-
-    //// Animation
-  /*  Animation danceAnimation_;
-    Animator animator_;*/
-
-    //// Timing
-    //float lastFrame_ = 0.0f;
 };
