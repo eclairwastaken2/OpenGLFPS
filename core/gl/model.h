@@ -21,6 +21,9 @@
 #include <vector>
 #include "animation/assimp_glm_helpers.h"
 #include "animation/animdata.h"
+#include "texture2d.h"
+#include "material.h"
+#include <unordered_map>
 
 using namespace std;
 
@@ -28,32 +31,38 @@ class Model
 {
 public:
 	// model data 
-	vector<Texture> textures_loaded;	// stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
-	vector<Mesh>    meshes;
+	//vector<Texture> textures_loaded;	// stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
+	std::vector<std::shared_ptr<Mesh>> meshes;
+
+	std::shared_ptr<Shader> shader_;
 	string directory;
 	bool gammaCorrection;
 
 
 
 	// constructor, expects a filepath to a 3D model.
-	Model(string const& path, bool gamma = false) : gammaCorrection(gamma)
+	Model(string const& path,
+		std::shared_ptr<Shader> shader,
+		bool gamma = false)
+		: gammaCorrection(gamma), shader_(shader)
 	{
 		loadModel(path);
 	}
 
 	// draws the model, and thus all its meshes
-	void Draw(Shader& shader)
-	{
-		for (unsigned int i = 0; i < meshes.size(); i++)
-			meshes[i].draw(shader);
-	}
+	//void Draw(Shader& shader)
+	//{
+	//	for (unsigned int i = 0; i < meshes.size(); i++)
+	//		meshes[i].draw(shader);
+	//}
 
 	auto& GetBoneInfoMap() { return m_BoneInfoMap; }
 	int& GetBoneCount() { return m_BoneCounter; }
 
 
 private:
-
+	std::unordered_map<std::string,
+		std::shared_ptr<Texture2D>> textureCache_;
 	std::map<string, BoneInfo> m_BoneInfoMap;
 	int m_BoneCounter = 0;
 
@@ -105,11 +114,11 @@ private:
 	}
 
 
-	Mesh processMesh(aiMesh* mesh, const aiScene* scene)
+	std::shared_ptr<Mesh> processMesh(aiMesh* mesh, const aiScene* scene)
 	{
 		vector<Vertex> vertices;
 		vector<unsigned int> indices;
-		vector<Texture> textures;
+		//vector<Texture> textures;
 
 		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 		{
@@ -136,20 +145,41 @@ private:
 			for (unsigned int j = 0; j < face.mNumIndices; j++)
 				indices.push_back(face.mIndices[j]);
 		}
-		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+		aiMaterial* aiMat = scene->mMaterials[mesh->mMaterialIndex];
+		auto material = std::make_shared<Material>(shader_);
 
-		vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-		vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-		std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
-		textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-		std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
-		textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
+		aiString str;
+
+		auto diffuse = loadMaterialTextures(aiMat, aiTextureType_DIFFUSE);
+		if (!diffuse.empty())
+			material->setDiffuse(diffuse[0]);
+
+		auto specular = loadMaterialTextures(aiMat, aiTextureType_SPECULAR);
+		if (!specular.empty())
+			material->setSpecular(specular[0]);
+
+		auto normal = loadMaterialTextures(aiMat, aiTextureType_HEIGHT);
+		if (!normal.empty())
+			material->setNormal(normal[0]);
+
+		auto height = loadMaterialTextures(aiMat, aiTextureType_AMBIENT);
+		if (!height.empty())
+			material->setHeight(height[0]);
+
+		//vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+		//textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+		//vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+		//textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+		//std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
+		//textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+		//std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
+		//textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
 		ExtractBoneWeightForVertices(vertices, mesh, scene);
 
-		return Mesh(vertices, indices, textures);
+		//return Mesh(vertices, indices, material);
+		return std::make_shared<Mesh>(vertices, indices, material);
+
 	}
 
 	void SetVertexBoneData(Vertex& vertex, int boneID, float weight)
@@ -247,36 +277,70 @@ private:
 
 	// checks all material textures of a given type and loads the textures if they're not loaded yet.
 	// the required info is returned as a Texture struct.
-	vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName)
+	std::vector<std::shared_ptr<Texture2D>>
+		loadMaterialTextures(aiMaterial* mat, aiTextureType type)
 	{
-		vector<Texture> textures;
+		std::vector<std::shared_ptr<Texture2D>> textures;
+
 		for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
 		{
 			aiString str;
 			mat->GetTexture(type, i, &str);
-			// check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
-			bool skip = false;
-			for (unsigned int j = 0; j < textures_loaded.size(); j++)
+
+			std::string path = directory + "/" + str.C_Str();
+
+			// cache lookup
+			auto it = textureCache_.find(path);
+			if (it != textureCache_.end())
 			{
-				if (std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0)
-				{
-					textures.push_back(textures_loaded[j]);
-					skip = true; // a texture with the same filepath has already been loaded, continue to next one. (optimization)
-					break;
-				}
+				textures.push_back(it->second);
+				continue;
 			}
-			if (!skip)
-			{   // if texture hasn't been loaded already, load it
-				Texture texture;
-				texture.id = TextureFromFile(str.C_Str(), this->directory);
-				texture.type = typeName;
-				texture.path = str.C_Str();
-				textures.push_back(texture);
-				textures_loaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecessary load duplicate textures.
-			}
+
+			auto texture =
+			std::make_shared<Texture2D>(
+				Texture2D::Builder()
+				.wrap(GL_REPEAT, GL_REPEAT)
+				.filter(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR)
+				.fromFile(path)
+			);
+
+			textureCache_[path] = texture;
+			textures.push_back(texture);
 		}
+
 		return textures;
 	}
+	//vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName)
+	//{
+	//	vector<Texture> textures;
+	//	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
+	//	{
+	//		aiString str;
+	//		mat->GetTexture(type, i, &str);
+	//		// check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
+	//		bool skip = false;
+	//		for (unsigned int j = 0; j < textures_loaded.size(); j++)
+	//		{
+	//			if (std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0)
+	//			{
+	//				textures.push_back(textures_loaded[j]);
+	//				skip = true; // a texture with the same filepath has already been loaded, continue to next one. (optimization)
+	//				break;
+	//			}
+	//		}
+	//		if (!skip)
+	//		{   // if texture hasn't been loaded already, load it
+	//			Texture texture;
+	//			texture.id = TextureFromFile(str.C_Str(), this->directory);
+	//			texture.type = typeName;
+	//			texture.path = str.C_Str();
+	//			textures.push_back(texture);
+	//			textures_loaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecessary load duplicate textures.
+	//		}
+	//	}
+	//	return textures;
+	//}
 };
 
 

@@ -1,7 +1,7 @@
 #include <glad/glad.h>
 
-#include "animation/animator.h"
-#include "animation/model_animation.h"
+//#include "animation/animator.h"
+#include "gl/model.h"
 #include "camera/camera.h"
 #include "gl/mesh.h"
 #include "gl/shader.h"
@@ -14,25 +14,30 @@ Renderer::Renderer()
 {
     staticShader_ = new Shader("Assets/shaders/light_caster.vs", "Assets/shaders/light_caster.fs"); 
     animatedShader_ = new Shader("Assets/shaders/anim_model.vs", "Assets/shaders/anim_model.fs"); 
-    staticShader_->use();
-    staticShader_->setVec3("flashlight.ambient", 0.1f, 0.1f, 0.1f);
-    staticShader_->setVec3("flashlight.diffuse", 0.8f, 0.8f, 0.8f);
-    staticShader_->setVec3("flashlight.specular", 1.0f, 1.0f, 1.0f);
+}
 
-    staticShader_->setFloat("flashlight.constant", 1.0f);
-    staticShader_->setFloat("flashlight.linear", 0.09f);
-    staticShader_->setFloat("flashlight.quadratic", 0.032f);
+void Renderer::applyFrameUniforms(Shader& shader)
+{
+    shader.setVec3("flashlight.ambient", 0.1f, 0.1f, 0.1f);
+    shader.setVec3("flashlight.diffuse", 0.8f, 0.8f, 0.8f);
+    shader.setVec3("flashlight.specular", 1.0f, 1.0f, 1.0f);
+    shader.setFloat("flashlight.constant", 1.0f);
+    shader.setFloat("flashlight.linear", 0.09f);
+    shader.setFloat("flashlight.quadratic", 0.032f);
+    shader.setFloat("material.shininess", 32.0f);
+    //shader.setInt("material.diffuse", 0);
+    //shader.setInt("material.specular", 1);
+    //shader.setVec3("emissiveColor", 0.0f, 0.0f, 0.0f);
+    //shader.setFloat("emissiveStrength", 0.0f);
+    //shader.setBool("isEmissive", false);
 
-    staticShader_->setFloat("material.shininess", 32.0f);
-    staticShader_->setInt("material.diffuse", 0);
-    staticShader_->setInt("material.specular", 1);
+    shader.setInt("numPointLights", 0);
 
-    staticShader_->setVec3("emissiveColor", 0.0f, 0.0f, 0.0f);
-    staticShader_->setFloat("emissiveStrength", 0.0f);
-    staticShader_->setBool("isEmissive", false);
-
-    staticShader_->setInt("numPointLights", 0);
-
+    shader.setVec3("flashlight.position", camera_.Position);
+    shader.setVec3("flashlight.direction", camera_.Front);
+    shader.setFloat("flashlight.cutOff", glm::cos(glm::radians(20.5f)));
+    shader.setFloat("flashlight.outerCutOff", glm::cos(glm::radians(25.5f)));
+    shader.setVec3("viewPos", camera_.Position);
 }
 
 void Renderer::begin(const Camera& camera)
@@ -40,7 +45,7 @@ void Renderer::begin(const Camera& camera)
 	modelBatches_.clear(); 
 	meshBatches_.clear(); 
 	//animatedDraws_.clear(); 
-
+    camera_ = camera; 
 	glm::mat4 projection = glm::perspective(
 		glm::radians(camera.Zoom),
 		(float)1920 / (float)1080,
@@ -49,34 +54,29 @@ void Renderer::begin(const Camera& camera)
 	);
 	view_ = camera.GetViewMatrix();
 	projection_ = projection; 
-
-    staticShader_->use();
-    staticShader_->setVec3("flashlight.position", camera.Position);
-    staticShader_->setVec3("flashlight.direction", camera.Front);
-    staticShader_->setFloat("flashlight.cutOff", glm::cos(glm::radians(20.5f)));
-    staticShader_->setFloat("flashlight.outerCutOff", glm::cos(glm::radians(25.5f)));
-    staticShader_->setVec3("viewPos", camera.Position);
 }
 
-void Renderer::submitMesh(const Mesh& mesh, 
-	const Material& material, 
-	const glm::mat4& transform)
+void Renderer::submitMesh(std::shared_ptr<Mesh> mesh,
+    const glm::mat4& transform)
 {
-	meshBatches_.push_back({ &mesh, &material, transform }); 
+    meshBatches_.push_back({ mesh, transform });
 }
 
 void Renderer::submitModel(const Model& model,
 	const glm::mat4& transform)
 {
-	modelBatches_.push_back({ &model, transform });
+    for (const auto& mesh : model.meshes)
+    {
+        submitMesh(mesh, transform); 
+    }
 }
 
-void Renderer::submitAnimated(const Model& model,
-	const Animator& animator,
-	const glm::mat4& transform)
-{
-	animatedDraws_.push_back({ &model, &animator, transform }); 
-}
+//void Renderer::submitAnimated(const Model& model,
+//	const Animator& animator,
+//	const glm::mat4& transform)
+//{
+//	animatedDraws_.push_back({ &model, &animator, transform }); 
+//}
 
 
 //void Renderer::drawInstancedBatch(const Model& model,
@@ -114,16 +114,20 @@ void Renderer::submitAnimated(const Model& model,
 //}
 
 void Renderer::drawInstancedBatch(const Mesh& mesh,
-    const Material& material,
     const std::vector<glm::mat4>& transforms)
 {
-    staticShader_->use();
-    staticShader_->setMat4("view", view_);
-    staticShader_->setMat4("projection", projection_);
-    material.bind();
     mesh.bind();
     std::cout << mesh.instanceVBO << std::endl;
 
+    auto& material = *mesh.material_;
+    material.bind();
+
+    Shader& shader = const_cast<Shader&>(material.getShader());
+    shader.setMat4("view", view_);
+    shader.setMat4("projection", projection_);
+    applyFrameUniforms(shader); 
+    mesh.bind(); 
+        
     glBindBuffer(GL_ARRAY_BUFFER, mesh.instanceVBO);
 
     glBufferData(
@@ -142,63 +146,39 @@ void Renderer::drawInstancedBatch(const Mesh& mesh,
     );
 }
 
-void Renderer::renderAnimatedPass()
-{
-    animatedShader_->use(); 
-    animatedShader_->setMat4("projection", projection_);
-    animatedShader_->setMat4("view", view_);
-
-    for (auto& draw : animatedDraws_)
-    {
-        animatedShader_->setMat4("model", draw.transform); 
-
-        auto boneMatrices = draw.animator->GetFinalBoneMatrices();
-        for (int i = 0; i < boneMatrices.size(); ++i)
-        {
-            animatedShader_->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", boneMatrices[i]);
-        }
-
-        draw.model->Draw(*animatedShader_);
-
-    }
-}
+//void Renderer::renderAnimatedPass()
+//{
+//    animatedShader_->use(); 
+//    animatedShader_->setMat4("projection", projection_);
+//    animatedShader_->setMat4("view", view_);
+//
+//    for (auto& draw : animatedDraws_)
+//    {
+//        animatedShader_->setMat4("model", draw.transform); 
+//
+//        auto boneMatrices = draw.animator->GetFinalBoneMatrices();
+//        for (int i = 0; i < boneMatrices.size(); ++i)
+//        {
+//            animatedShader_->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", boneMatrices[i]);
+//        }
+//
+//        draw.model->Draw(*animatedShader_);
+//
+//    }
+//}
 
 void Renderer::renderMeshPass()
 {
-    staticShader_->use();
-    staticShader_->setMat4("view", view_);
-    staticShader_->setMat4("projection", projection_);
-
-    struct Key
-    {
-        const Mesh* mesh;
-        const Material* material;
-
-        bool operator==(const Key& other) const
-        {
-            return mesh == other.mesh && material == other.material;
-        }
-    };
-
-    struct KeyHasher
-    {
-        std::size_t operator()(const Key& k) const
-        {
-            return std::hash<const void*>()(k.mesh) ^
-                std::hash<const void*>()(k.material);
-        }
-    };
-
-    std::unordered_map<Key, std::vector<glm::mat4>, KeyHasher> batches;
+    std::unordered_map<const Mesh*, std::vector<glm::mat4>> batches;
 
     for (auto& draw : meshBatches_)
     {
-        batches[{ draw.mesh, draw.material }].push_back(draw.transform);
+        batches[draw.mesh.get()].push_back(draw.transform);
     }
 
-    for (auto& [key, transforms] : batches)
+    for (auto& [mesh, transforms] : batches)
     {
-        drawInstancedBatch(*key.mesh, *key.material, transforms);
+        drawInstancedBatch(*mesh, transforms);
     }
 }
 

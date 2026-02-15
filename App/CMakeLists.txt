@@ -6,7 +6,6 @@ set(APP_SOURCES
     "worldDraw/levelRenderer.cpp"
     "worldDraw/levelRenderer.h"
     "worldDraw/levelVisuals.h"
-    "world/enemies.h"
     "world/level.cpp"
     "world/level.h"
     "world/player.h"

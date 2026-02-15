@@ -6,14 +6,32 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <gl/texture2d.h>
 #include <gl/material.h>
+#include <gl/shader.h>
 #include <iostream>
+#include <memory>
 
 class Tiles : public GameObject
 {
 public:
 	Tiles()
+		: floorShader_(std::make_shared<Shader>(
+			"Assets/shaders/light_caster.vs",
+			"Assets/shaders/light_caster.fs")),
+		floorMaterial_(floorShader_)
 	{
-		floorMaterial_.setTexture(woodTexture_);
+		Texture2D tex =
+			Texture2D::Builder()
+			.wrap(GL_REPEAT, GL_REPEAT)
+			.filter(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR)
+			.fromFile("Assets/textures/container.jpg");
+
+		woodTexture_ = std::make_shared<Texture2D>(std::move(tex));
+
+		floorMaterial_.setDiffuse(woodTexture_);
+		cubeMesh_->material_ =
+			std::make_shared<Material>(floorShader_);
+
+		cubeMesh_->material_->setDiffuse(woodTexture_);
 	}
 
 	void update(float dt) override
@@ -36,7 +54,6 @@ public:
 				);
 				renderer.submitMesh(
 					cubeMesh_,
-					floorMaterial_,
 					floorModel
 				);
 
@@ -49,7 +66,6 @@ public:
 
 				renderer.submitMesh(
 					cubeMesh_,
-					floorMaterial_,
 					ceilingModel
 				);	
 			}
@@ -65,7 +81,6 @@ public:
 					model = glm::translate(model, glm::vec3((float)x, 0.0f, (float)z));
 					renderer.submitMesh(
 						cubeMesh_,
-						floorMaterial_,
 						model
 					);
 				}
@@ -75,13 +90,8 @@ public:
 
 private:
 	Level level_ = Level("Assets/levels/level.txt");
-	Mesh cubeMesh_ = MakeCube();
-	std::shared_ptr<Texture2D> woodTexture_ = 
-		std::make_shared<Texture2D>(
-		Texture2D::Builder()
-		.wrap(GL_REPEAT, GL_REPEAT)
-		.filter(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR)
-		.fromFile("Assets/textures/container.jpg")
-	);
+	std::shared_ptr<Mesh> cubeMesh_ = std::make_shared<Mesh>(MakeCube());
+	std::shared_ptr<Texture2D> woodTexture_;
+	std::shared_ptr<Shader> floorShader_;
 	Material floorMaterial_;
 };
