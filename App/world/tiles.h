@@ -9,14 +9,13 @@
 #include <gl/shader.h>
 #include <iostream>
 #include <memory>
+#include <gl/shaderManager.h>
 
 class Tiles : public GameObject
 {
 public:
 	Tiles()
-		: floorShader_(std::make_shared<Shader>(
-			"Assets/shaders/light_caster.vs",
-			"Assets/shaders/light_caster.fs")),
+		: floorShader_(ShaderManager::get("light")),
 		floorMaterial_(floorShader_)
 	{
 		Texture2D tex =

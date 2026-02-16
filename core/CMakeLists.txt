@@ -25,7 +25,7 @@ target_sources(Core PRIVATE ${CORE_SOURCES}
 "gl/texturedModel.h"
 "gl/texture2d.h"
 
- "gl/rawModel.h" "gl/material.h" "gl/material.cpp")
+ "gl/rawModel.h" "gl/material.h" "gl/material.cpp" "gl/shaderManager.h" "gl/shaderManager.cpp")
 
 target_include_directories(Core
     PUBLIC
