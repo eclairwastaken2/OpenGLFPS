@@ -8,7 +8,11 @@ class Texture2D
 {
 public:
 	Texture2D() { glGenTextures(1, &id_); }
-	~Texture2D() { glDeleteTextures(1, &id_); }
+    ~Texture2D()
+    {
+        if (id_ != 0)
+            glDeleteTextures(1, &id_);
+    }
 
 	Texture2D(const Texture2D&) = delete;
 	Texture2D& operator=(const Texture2D&) = delete;
@@ -17,6 +21,18 @@ public:
         : id_(other.id_)
     {
         other.id_ = 0;
+    }
+
+    Texture2D& operator=(Texture2D&& other) noexcept
+    {
+        if (this != &other)
+        {
+            glDeleteTextures(1, &id_);
+
+            id_ = other.id_;
+            other.id_ = 0;
+        }
+        return *this;
     }
 
 	void bind(GLuint unit = 0) const

@@ -1,5 +1,6 @@
 #include "application/application.h"
 #include "game/gameLayer.h"
+#include <gl/shaderManager.h>
 
 int main()
 {
@@ -9,6 +10,8 @@ int main()
 	appSpec.WindowSpec.Height = 1080;
 
 	Core::Application application(appSpec);
+	ShaderManager::initialize();
+
 	application.PushLayer<GameLayer>();
 	application.Run();
 }

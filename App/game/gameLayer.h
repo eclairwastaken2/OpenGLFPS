@@ -4,15 +4,12 @@
 
 #include "world/player.h"
 #include "world/level.h"
-#include <gl/mesh.h>
-#include <gl/texture2d.h>
-#include <gl/shader.h>
-#include <gl/material.h>
-#include <geometry/cube.h>
 #include <glad/glad.h>
 #include "camera/camera.h"
 #include "camera/cameraController.h"
 #include "renderer/entityRenderer.h"
+#include <world/tiles.h>
+
 
 class GameLayer : public Core::Layer
 {
@@ -25,20 +22,13 @@ public:
     virtual void onRender() override; 
 
 private:
-    void setupLighting();
-    void updateLighting();
-
-private:
 
     Player player_; 
-    //// World
+    // World
     Level level_;
-    Mesh cubeMesh_;
-    Material floorMaterial_; 
-
-    std::shared_ptr<Texture2D> woodTexture_;
+    Tiles tiles_; 
  
-    //// Camera
+    // Camera
     Camera camera_;
     CameraController cameraController_;
     

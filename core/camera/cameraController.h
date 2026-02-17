@@ -7,9 +7,10 @@ class CameraController
 {
 public:
 	CameraController(Camera& camera, float startX, float startY); 
-
-	void onUpdate(float deltaTime); 
+ 
 	void onEvent(Core::Event& e); 
+	glm::vec3 getMovement(float dt) const;
+
 
 private:
 	// event handlers

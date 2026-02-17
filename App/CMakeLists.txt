@@ -6,7 +6,6 @@ set(APP_SOURCES
     "worldDraw/levelRenderer.cpp"
     "worldDraw/levelRenderer.h"
     "worldDraw/levelVisuals.h"
-    "world/enemies.h"
     "world/level.cpp"
     "world/level.h"
     "world/player.h"
@@ -15,7 +14,7 @@ set(APP_SOURCES
 
 )
 
-target_sources(App PRIVATE ${APP_SOURCES} "game/gameLayer.cpp")
+target_sources(App PRIVATE ${APP_SOURCES} "game/gameLayer.cpp" "world/gameObject.h" "world/tiles.h"   "world/gems.h")
 
 target_include_directories(App
     PUBLIC
