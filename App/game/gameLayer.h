@@ -9,7 +9,7 @@
 #include "camera/cameraController.h"
 #include "renderer/entityRenderer.h"
 #include <world/tiles.h>
-
+#include <world/gems.h>
 
 class GameLayer : public Core::Layer
 {
@@ -27,6 +27,7 @@ private:
     // World
     Level level_;
     Tiles tiles_; 
+    Gems gems_; 
  
     // Camera
     Camera camera_;

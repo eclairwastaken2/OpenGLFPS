@@ -33,6 +33,7 @@ void GameLayer::onRender()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     renderer_.begin(camera_); 
     tiles_.render(renderer_); 
+    gems_.render(renderer_); 
     renderer_.end();
 }
 
