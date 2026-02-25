@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <gl/renderParams.h>
 
 class Shader; 
 class Texture2D; 
@@ -9,6 +10,7 @@ class Material
 {
 public:
 	Material(std::shared_ptr<Shader> shader);
+	Material(std::shared_ptr<Shader> shader, RenderParams renderParams);
 	void bind() const; 
 	const Shader& getShader() const;
 	void setDiffuse(std::shared_ptr<Texture2D> texture); 
@@ -22,5 +24,6 @@ private:
 	std::shared_ptr<Texture2D> normal_;
 	std::shared_ptr<Texture2D> height_;
 	std::shared_ptr<Shader> shader_;
+	RenderParams params_;
 
 };

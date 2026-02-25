@@ -29,7 +29,7 @@ void Renderer::applyFrameUniforms(Shader& shader)
     //shader.setInt("material.specular", 1);
     //shader.setVec3("emissiveColor", 0.0f, 0.0f, 0.0f);
     //shader.setFloat("emissiveStrength", 0.0f);
-    //shader.setBool("isEmissive", false);
+    shader.setBool("isEmissive", false);
 
     shader.setInt("numPointLights", 0);
 
@@ -123,6 +123,7 @@ void Renderer::drawInstancedBatch(const Mesh& mesh,
     material.bind();
 
     Shader& shader = const_cast<Shader&>(material.getShader());
+    //shader.use(); 
     shader.setMat4("view", view_);
     shader.setMat4("projection", projection_);
     applyFrameUniforms(shader); 

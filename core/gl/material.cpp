@@ -5,6 +5,13 @@
 Material::Material(std::shared_ptr<Shader> shader)
     : shader_(std::move(shader))
 {
+    params_ = { {0.0f, 0.0f, 0.0f}, 0.0f };
+}
+
+Material::Material(std::shared_ptr<Shader> shader, RenderParams renderParams)
+    : shader_(std::move(shader))
+{
+    params_ = renderParams; 
 }
 
 const Shader& Material::getShader() const
@@ -40,6 +47,9 @@ void Material::bind() const
         height_->bind(slot);
         shader_->setInt("material.height", slot++);
     }
+  
+    shader_->setVec3("emissiveColor", params_.emissiveColor);
+    shader_->setFloat("emissiveStrength", params_.emissiveStrength);
 }
 
 void Material::setDiffuse(std::shared_ptr<Texture2D> t) { diffuse_ = t; }

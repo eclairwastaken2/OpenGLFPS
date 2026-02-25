@@ -23,6 +23,7 @@
 #include "animation/animdata.h"
 #include "texture2d.h"
 #include "material.h"
+#include "gl/renderParams.h"
 #include <unordered_map>
 
 using namespace std;
@@ -35,6 +36,7 @@ public:
 	std::vector<std::shared_ptr<Mesh>> meshes;
 
 	std::shared_ptr<Shader> shader_;
+	RenderParams renderParams_; 
 	string directory;
 	bool gammaCorrection;
 
@@ -43,8 +45,9 @@ public:
 	// constructor, expects a filepath to a 3D model.
 	Model(string const& path,
 		std::shared_ptr<Shader> shader,
+		RenderParams renderParams,
 		bool gamma = false)
-		: gammaCorrection(gamma), shader_(shader)
+		: gammaCorrection(gamma), shader_(shader), renderParams_(renderParams)
 	{
 		loadModel(path);
 	}
@@ -146,7 +149,7 @@ private:
 				indices.push_back(face.mIndices[j]);
 		}
 		aiMaterial* aiMat = scene->mMaterials[mesh->mMaterialIndex];
-		auto material = std::make_shared<Material>(shader_);
+		auto material = std::make_shared<Material>(shader_, renderParams_);
 
 		aiString str;
 

@@ -8,6 +8,7 @@
 #include <gl/texture2d.h>
 #include <gl/material.h>
 #include <gl/shader.h>
+#include <gl/renderParams.h>
 #include <gl/model.h>
 #include <iostream>
 #include <memory>
@@ -18,9 +19,13 @@ class Gems : public GameObject
 {
 public:
 	Gems()
-		: floorShader_(ShaderManager::get("light")),
-		model_("Assets/resources/objects/gems/source/gems.obj", floorShader_)
+		: glow_({ 1.0f, 0.8f, 0.1f }, 1.0f),
+		floorShader_(ShaderManager::get("light")),
+		model_("Assets/resources/objects/gems/source/gems.obj",
+			floorShader_,
+			glow_)
 	{
+	
 	}
 
 	void update(float dt) override
@@ -44,10 +49,13 @@ public:
 				}
 			}
 		}
+
+
 	}
 
 private:
 	Level level_ = Level("Assets/levels/level.txt");
+	RenderParams glow_;
 	std::shared_ptr<Shader> floorShader_;
 	Model model_;
 };
