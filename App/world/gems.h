@@ -35,6 +35,7 @@ public:
 
 	void render(Renderer& renderer) override
 	{
+		int numPointLight = 0; 
 		for (int z = 0; z < level_.getH(); z++)
 		{
 			for (int x = 0; x < level_.getW(); x++)
@@ -46,10 +47,20 @@ public:
 					glm::vec3 scaleVector = glm::vec3(0.2f, 0.2f, 0.2f);
 					gemModel = glm::scale(gemModel, scaleVector);
 					renderer.submitModel(model_, gemModel); 
+					std::string base = "pointLights[" + std::to_string(numPointLight) + "]";
+					floorShader_->setVec3(base + ".position", glm::vec3((float)x, 0.0f, (float)z));
+					floorShader_->setVec3(base + ".ambient", 1.0f, 0.8f, 0.1f);
+					floorShader_->setVec3(base + ".diffuse", 1.0f, 0.8f, 0.1f);
+					floorShader_->setVec3(base + ".specular", 1.0f, 0.8f, 0.1f);
+
+					floorShader_->setFloat(base + ".constant", 1.0f);
+					floorShader_->setFloat(base + ".linear", 0.7f);
+					floorShader_->setFloat(base + ".quadratic", 1.8f);
+					numPointLight++;
 				}
 			}
 		}
-
+		floorShader_->setInt("numPointLights", numPointLight); 
 
 	}
 

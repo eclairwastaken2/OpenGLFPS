@@ -5,7 +5,6 @@
 Material::Material(std::shared_ptr<Shader> shader)
     : shader_(std::move(shader))
 {
-    params_ = { {0.0f, 0.0f, 0.0f}, 0.0f };
 }
 
 Material::Material(std::shared_ptr<Shader> shader, RenderParams renderParams)
